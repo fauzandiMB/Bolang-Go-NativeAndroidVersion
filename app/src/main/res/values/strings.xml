@@ -1,4 +1,21 @@
 <resources>
     <string name="app_name">Bolang-Go</string>
     <string name="action_settings">Settings</string>
+
+    <string-array name="daftar_rintangan">
+        <item>Kuis</item>
+        <item>Hadiah</item>
+    </string-array>
+
+    <string-array name="daftar_kuis">
+        <item>IPA</item>
+        <item>IPS</item>
+    </string-array>
+
+    <string-array name="daftar_hadiah">
+        <item>1000 koin</item>
+        <item>2000 koin</item>
+        <item>3000 koin</item>
+    </string-array>
+
 </resources>
