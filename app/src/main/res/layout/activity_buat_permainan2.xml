@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="go.bolang.www.bolang_go.BuatPermainan2Activity">
+    tools:context="go.bolang.www.bolang_go.BuatPermainan2Activity"
+    android:background="@drawable/background_admin">
 
 
     <RelativeLayout
@@ -18,7 +19,8 @@
             android:layout_height="match_parent"
             android:orientation="vertical"
             tools:layout_editor_absoluteX="8dp"
-            tools:layout_editor_absoluteY="8dp">
+            tools:layout_editor_absoluteY="8dp"
+            >
 
             <TextView
                 android:id="@+id/textView2"
@@ -60,7 +62,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="0.30"
-                            android:text="Pos Merah" />
+                            android:text="Pos Merah"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
 
                         <ImageView
                             android:id="@+id/imageView"
@@ -78,16 +81,17 @@
                     </LinearLayout>
 
                     <Spinner
-                        android:id="@+id/spinner2"
+                        android:id="@+id/spin_TR_M"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:entries="@array/daftar_rintangan" />
 
                     <Spinner
-                        android:id="@+id/spinner3"
+                        android:id="@+id/spin_HR_M"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:entries="@array/daftar_kuis" />
+                        android:entries="@array/daftar_kuis"
+                        android:visibility="invisible" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -114,7 +118,7 @@
                             android:layout_height="match_parent"
                             android:layout_weight="0.30"
                             android:cropToPadding="false"
-                            app:srcCompat="@android:color/holo_red_dark" />
+                            app:srcCompat="@android:color/holo_blue_bright" />
 
                         <Space
                             android:layout_width="wrap_content"
@@ -124,16 +128,17 @@
                     </LinearLayout>
 
                     <Spinner
-                        android:id="@+id/spinner4"
+                        android:id="@+id/spin_TR_B"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:entries="@array/daftar_rintangan" />
 
                     <Spinner
-                        android:id="@+id/spinner5"
+                        android:id="@+id/spin_HR_B"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:entries="@array/daftar_kuis" />
+                        android:entries="@array/daftar_kuis"
+                        android:visibility="invisible" />
                 </LinearLayout>
 
             </LinearLayout>
@@ -165,7 +170,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="0.30"
-                            android:text="Pos Merah" />
+                            android:text="Pos Hijau" />
 
                         <ImageView
                             android:id="@+id/imageView3"
@@ -173,7 +178,7 @@
                             android:layout_height="match_parent"
                             android:layout_weight="0.30"
                             android:cropToPadding="false"
-                            app:srcCompat="@android:color/holo_red_dark" />
+                            app:srcCompat="@android:color/holo_green_light" />
 
                         <Space
                             android:layout_width="wrap_content"
@@ -183,16 +188,17 @@
                     </LinearLayout>
 
                     <Spinner
-                        android:id="@+id/spinner6"
+                        android:id="@+id/spin_TR_H"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:entries="@array/daftar_rintangan" />
 
                     <Spinner
-                        android:id="@+id/spinner7"
+                        android:id="@+id/spin_HR_H"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:entries="@array/daftar_kuis" />
+                        android:entries="@array/daftar_kuis"
+                        android:visibility="invisible" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -211,7 +217,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="0.30"
-                            android:text="Pos Merah" />
+                            android:text="Pos Orange" />
 
                         <ImageView
                             android:id="@+id/imageView4"
@@ -219,7 +225,7 @@
                             android:layout_height="match_parent"
                             android:layout_weight="0.30"
                             android:cropToPadding="false"
-                            app:srcCompat="@android:color/holo_red_dark" />
+                            app:srcCompat="@android:color/holo_orange_dark" />
 
                         <Space
                             android:layout_width="wrap_content"
@@ -229,16 +235,17 @@
                     </LinearLayout>
 
                     <Spinner
-                        android:id="@+id/spinner8"
+                        android:id="@+id/spin_TR_O"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:entries="@array/daftar_rintangan" />
 
                     <Spinner
-                        android:id="@+id/spinner9"
+                        android:id="@+id/spin_HR_O"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:entries="@array/daftar_kuis" />
+                        android:entries="@array/daftar_kuis"
+                        android:visibility="invisible" />
                 </LinearLayout>
 
             </LinearLayout>
