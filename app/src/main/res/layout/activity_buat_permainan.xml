@@ -34,5 +34,27 @@
             android:layout_weight="1"
             android:text="Nama Permainan" />
 
+        <EditText
+            android:id="@+id/nama_permainan_field"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:inputType="text" />
+
+        <TextView
+            android:id="@+id/textView8"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Pilih Jumlah Pemain" />
+
+        <Spinner
+            android:id="@+id/spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>
