@@ -7,9 +7,9 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.Spinner;
 
-public class BuatPermainan2Activity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class BuatPermainan2Activity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
     private Spinner spinTRM, spinTRB, spinTRH, spinTRO,
-                spinHRM, spinHRB, spinHRH, spinHRO;
+            spinHRM, spinHRB, spinHRH, spinHRO;
     private Button bLanjut;
 
     @Override

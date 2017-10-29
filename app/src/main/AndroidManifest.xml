@@ -33,7 +33,8 @@
 
         <activity android:name=".BuatPermainanActivity" />
         <activity android:name=".GabungPermainanActivity" />
-        <activity android:name=".BolangActivity"></activity>
+        <activity android:name=".BolangActivity" />
+        <activity android:name=".BuatPermainan2Activity"></activity>
     </application>
 
 </manifest>
