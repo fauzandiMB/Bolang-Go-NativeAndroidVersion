@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "776452641206",
+    "firebase_url": "https://bolanggo-182412.firebaseio.com",
+    "project_id": "bolanggo-182412",
+    "storage_bucket": "bolanggo-182412.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:776452641206:android:0f6e756e9c30ec82",
+        "android_client_info": {
+          "package_name": "go.bolang.www.bolang_go"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "776452641206-h2l763gcl2bqgtle4tq4pl2drqmqhi1f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDeQLvmDra-goEElSYABESHwy_K3qdwmBU"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
