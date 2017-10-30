@@ -13,6 +13,8 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -32,6 +34,15 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.GoogleMap.OnMyLocationButtonClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMyLocationChangeListener;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class BolangActivity extends AppCompatActivity
         implements OnMapReadyCallback,
@@ -43,22 +54,61 @@ public class BolangActivity extends AppCompatActivity
     private LocationRequest locationRequest;
     private Location lastLocation;
     private Marker currentLocationMarker;
-    public static final int REQUEST_LOCATION_CODE = 99;
+    private List<Marker> challengesMarkers;
+    private DatabaseReference mDatabase;
+    private DatabaseReference mChallenge;
+    private List<Challenge> challenges;
+    private Player player;
+    private FirebaseAuth mAuth;
+    private FirebaseAuth.AuthStateListener mAuthListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bolang);
 
+        player = new Player();
+
+        challenges = new ArrayList<Challenge>();
+        challengesMarkers = new ArrayList<Marker>();
+
+        // Firebase Database
+        mDatabase = FirebaseDatabase.getInstance().getReference("TestGame");
+
+        mChallenge = mDatabase.child("challenges");
+
+        mChallenge.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                challenges.clear();
+                for(DataSnapshot snap: dataSnapshot.getChildren()){
+                    Challenge challenge = snap.getValue(Challenge.class);
+                    challenges.add(challenge);
+                }
+                addmarkerChallenge();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        // Firebase Auth
+        mAuth = FirebaseAuth.getInstance();
+        addPlayer(mAuth.getCurrentUser().getUid());
+
+        //check permission
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
             checkLocationPersmission();
         }else {
 
         }
-
+        // add to support fragment
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
 
     }
 
@@ -66,7 +116,7 @@ public class BolangActivity extends AppCompatActivity
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
 
         switch (requestCode){
-            case REQUEST_LOCATION_CODE:
+            case Constant.REQUEST_LOCATION_CODE:
                 if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
                     if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
                         if(client == null){
@@ -96,6 +146,46 @@ public class BolangActivity extends AppCompatActivity
 
     }
 
+    public void addmarkerChallenge(){
+        challengesMarkers.clear();
+        for(int i = 0; i < challenges.size(); i++){
+            Challenge challenge = challenges.get(i);
+            MarkerOptions markerOptions = new MarkerOptions();
+            markerOptions.position(challenge.getPos());
+            markerOptions.title(challenge.getType());
+            switch (i){
+                case 0:
+                    markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
+                    break;
+                case 1:
+                    markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
+                    break;
+                case 2:
+                    markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN));
+                    break;
+                case 3:
+                    markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+                    break;
+                case 4:
+                    markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
+                    break;
+                case 5:
+                    markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE));
+                    break;
+                case 6:
+                    markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+                    break;
+                case 7:
+                    markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ROSE));
+                    break;
+                default:
+                    markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET));
+                    break;
+            }
+            challengesMarkers.add(mMap.addMarker(markerOptions));
+        }
+    }
+
     protected synchronized void buildClientApi() {
         client = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
@@ -103,6 +193,11 @@ public class BolangActivity extends AppCompatActivity
                 .addApi(LocationServices.API).build();
 
         client.connect();
+    }
+
+    public void addPlayer(String id){
+        player = new Player(id);
+        mDatabase.child(Constant.DB_PLAYERS).child(id).setValue(player);
     }
 
     @Override
@@ -117,14 +212,17 @@ public class BolangActivity extends AppCompatActivity
             LocationServices.FusedLocationApi.requestLocationUpdates(client, locationRequest, this);
         }
 
+        //add player to database server
+
+
     }
 
     public boolean checkLocationPersmission(){
         if(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
             if(ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)){
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION_CODE);
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, Constant.REQUEST_LOCATION_CODE);
             }else{
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION_CODE);
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, Constant.REQUEST_LOCATION_CODE);
             }
             return false;
         }else
@@ -150,16 +248,15 @@ public class BolangActivity extends AppCompatActivity
         }
 
         LatLng latlang = new LatLng(location.getLatitude(), location.getLongitude());
-
-        MarkerOptions markerOptions = new MarkerOptions();
-        markerOptions.position(latlang);
-        markerOptions.title("Current Location");
-        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
-
-        currentLocationMarker = mMap.addMarker(markerOptions);
-
         mMap.moveCamera(CameraUpdateFactory.newLatLng(latlang));
         mMap.animateCamera(CameraUpdateFactory.zoomBy(17));
+
+        // set player position
+        player.setPos(latlang);
+
+        //Firebase Database update position player
+        mDatabase.child(Constant.DB_PLAYERS).child(mAuth.getCurrentUser().getUid()).child(Constant.DB_LATITUDE).setValue(location.getLatitude());
+        mDatabase.child(Constant.DB_PLAYERS).child(mAuth.getCurrentUser().getUid()).child(Constant.DB_LONGITUDE).setValue(location.getLongitude());
 
         if(client != null){
             LocationServices.FusedLocationApi.removeLocationUpdates(client, this);
