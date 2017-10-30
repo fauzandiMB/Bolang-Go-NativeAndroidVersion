@@ -81,20 +81,19 @@
             android:text="Cara Bermain"/>
 
         <Button
-            android:id="@+id/btn_login"
-            android:layout_alignParentBottom="true"
-            android:layout_centerInParent="true"
+            android:id="@+id/btn_logout"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:background="#eeeeee"
-            android:text="Login"
-            android:onClick="toGabungPermainan"
+            android:layout_alignParentBottom="true"
+            android:layout_centerInParent="true"
             android:height="125dp"
-            android:bottomRightRadius="50dp"
+            android:background="#eeeeee"
             android:bottomLeftRadius="50dp"
+            android:bottomRightRadius="50dp"
+            android:text="Log Me Out"
             android:topLeftRadius="50dp"
             android:topRightRadius="50dp"
-            tools:layout_editor_absoluteY="0dp"
-            tools:layout_editor_absoluteX="8dp" />
+            tools:layout_editor_absoluteX="8dp"
+            tools:layout_editor_absoluteY="0dp" />
     </RelativeLayout>
 </android.support.constraint.ConstraintLayout>

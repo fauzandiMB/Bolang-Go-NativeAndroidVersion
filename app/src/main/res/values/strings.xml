@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">Bolang-Go</string>
     <string name="action_settings">Settings</string>
+    <string name="facebook_app_id">722808467916960</string>
+    <string name="fb_login_protocol_scheme">fb722808467916960</string>
+    <string name="asd">776452641206-h2l763gcl2bqgtle4tq4pl2drqmqhi1f.apps.googleusercontent.com</string>
 
     <string-array name="daftar_rintangan">
         <item>Kuis</item>

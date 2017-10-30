@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "776452641206-5gremadisjp57nab16hoikib9hsmih9q.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "go.bolang.www.bolang_go",
+            "certificate_hash": "26593b2dad3a34e2e0101a227f1725eec70a4f73"
+          }
+        },
+        {
           "client_id": "776452641206-h2l763gcl2bqgtle4tq4pl2drqmqhi1f.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -29,8 +37,13 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "776452641206-h2l763gcl2bqgtle4tq4pl2drqmqhi1f.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
           "status": 2
