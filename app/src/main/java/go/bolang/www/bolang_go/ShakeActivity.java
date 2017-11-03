@@ -22,7 +22,7 @@ public class ShakeActivity extends AppCompatActivity implements SensorEventListe
 
     private long lastUpdate = 0;
     private float last_x, last_y, last_z;
-    private static final int SHAKE_THRESHOLD = 12000;
+    private static final int SHAKE_THRESHOLD = 2000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,9 +50,10 @@ public class ShakeActivity extends AppCompatActivity implements SensorEventListe
                 lastUpdate = curTime;
 
                 float speed = Math.abs(x + y + z - last_x - last_y - last_z)/ diffTime * 10000;
-
+                //getIncrementalValue(curTime, diffTime, speed, x, y, z);
                 if (speed > SHAKE_THRESHOLD) {
-                    getRandomNumber();
+                    //getRandomNumber();
+                    getIncrementalValue(curTime, diffTime, speed, x, y, z);
                 }
 
                 last_x = x;
@@ -109,48 +110,25 @@ public class ShakeActivity extends AppCompatActivity implements SensorEventListe
 
         text = (TextView)findViewById(R.id.number_6);
         text.setText(""+numbersGenerated.get(5));
+    }
 
-        FrameLayout ball1 = (FrameLayout) findViewById(R.id.ball_1);
-        ball1.setVisibility(View.INVISIBLE);
+    private void getIncrementalValue(long a, long b, float c, float x, float y, float z) {
+        TextView text = (TextView)findViewById(R.id.number_1);
+        text.setText(""+(int) a);
 
-        FrameLayout ball2 = (FrameLayout) findViewById(R.id.ball_2);
-        ball2.setVisibility(View.INVISIBLE);
+        text = (TextView)findViewById(R.id.number_2);
+        text.setText(""+(int)b);
 
-        FrameLayout ball3 = (FrameLayout) findViewById(R.id.ball_3);
-        ball3.setVisibility(View.INVISIBLE);
+        text = (TextView)findViewById(R.id.number_3);
+        text.setText(""+(int)c);
 
-        FrameLayout ball4 = (FrameLayout) findViewById(R.id.ball_4);
-        ball4.setVisibility(View.INVISIBLE);
+        text = (TextView)findViewById(R.id.number_4);
+        text.setText(""+(int)x);
 
-        FrameLayout ball5 = (FrameLayout) findViewById(R.id.ball_5);
-        ball5.setVisibility(View.INVISIBLE);
+        text = (TextView)findViewById(R.id.number_5);
+        text.setText(""+(int)y);
 
-        FrameLayout ball6 = (FrameLayout) findViewById(R.id.ball_6);
-        ball6.setVisibility(View.INVISIBLE);
-
-        Animation a = AnimationUtils.loadAnimation(this, R.anim.move_down_ball_first);
-        ball6.setVisibility(View.VISIBLE);
-        ball6.clearAnimation();
-        ball6.startAnimation(a);
-
-        ball5.setVisibility(View.VISIBLE);
-        ball5.clearAnimation();
-        ball5.startAnimation(a);
-
-        ball4.setVisibility(View.VISIBLE);
-        ball4.clearAnimation();
-        ball4.startAnimation(a);
-
-        ball3.setVisibility(View.VISIBLE);
-        ball3.clearAnimation();
-        ball3.startAnimation(a);
-
-        ball2.setVisibility(View.VISIBLE);
-        ball2.clearAnimation();
-        ball2.startAnimation(a);
-
-        ball1.setVisibility(View.VISIBLE);
-        ball1.clearAnimation();
-        ball1.startAnimation(a);
+        text = (TextView)findViewById(R.id.number_6);
+        text.setText(""+(int)z);
     }
 }
