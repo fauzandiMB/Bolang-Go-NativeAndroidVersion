@@ -16,13 +16,19 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Random;
 
+import static android.R.attr.x;
+import static android.R.attr.y;
+
 public class ShakeActivity extends AppCompatActivity implements SensorEventListener {
     private SensorManager senSensorManager;
     private Sensor senAccelerometer;
 
     private long lastUpdate = 0;
     private float last_x, last_y, last_z;
-    private static final int SHAKE_THRESHOLD = 2000;
+    private static final int SHAKE_THRESHOLD1 = 500;
+    private static final int SHAKE_THRESHOLD2 = 1000;
+    private static final int SHAKE_THRESHOLD3 = 3000;
+    private static final int SHAKE_THRESHOLD4 = 6000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,10 +56,15 @@ public class ShakeActivity extends AppCompatActivity implements SensorEventListe
                 lastUpdate = curTime;
 
                 float speed = Math.abs(x + y + z - last_x - last_y - last_z)/ diffTime * 10000;
-                //getIncrementalValue(curTime, diffTime, speed, x, y, z);
-                if (speed > SHAKE_THRESHOLD) {
-                    //getRandomNumber();
-                    getIncrementalValue(curTime, diffTime, speed, x, y, z);
+
+                if (speed > SHAKE_THRESHOLD1) {
+                    getIncrementalValue1(23);
+                }else if (speed > SHAKE_THRESHOLD2){
+                    getIncrementalValue2(52);
+                }else if (speed > SHAKE_THRESHOLD3){
+                    getIncrementalValue3(76);
+                }else if (speed > SHAKE_THRESHOLD4){
+                    getIncrementalValue4(92);
                 }
 
                 last_x = x;
@@ -79,56 +90,86 @@ public class ShakeActivity extends AppCompatActivity implements SensorEventListe
         senSensorManager.registerListener(this, senAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
     }
 
-    private void getRandomNumber() {
-        ArrayList numbersGenerated = new ArrayList();
+//    private void getRandomNumber() {
+//        ArrayList numbersGenerated = new ArrayList();
+//
+//        for (int i = 0; i < 6; i++) {
+//            Random randNumber = new Random();
+//            int iNumber = randNumber.nextInt(48) + 1;
+//
+//            if(!numbersGenerated.contains(iNumber)) {
+//                numbersGenerated.add(iNumber);
+//            } else {
+//                i--;
+//            }
+//        }
+//
+//        TextView text = (TextView)findViewById(R.id.number_1);
+//        text.setText(""+numbersGenerated.get(0));
+//
+//        text = (TextView)findViewById(R.id.number_2);
+//        text.setText(""+numbersGenerated.get(1));
+//
+//        text = (TextView)findViewById(R.id.number_3);
+//        text.setText(""+numbersGenerated.get(2));
+//
+//        text = (TextView)findViewById(R.id.number_4);
+//        text.setText(""+numbersGenerated.get(3));
+//
+//        text = (TextView)findViewById(R.id.number_5);
+//        text.setText(""+numbersGenerated.get(4));
+//
+//        text = (TextView)findViewById(R.id.number_6);
+//        text.setText(""+numbersGenerated.get(5));
+//    }
 
-        for (int i = 0; i < 6; i++) {
-            Random randNumber = new Random();
-            int iNumber = randNumber.nextInt(48) + 1;
-
-            if(!numbersGenerated.contains(iNumber)) {
-                numbersGenerated.add(iNumber);
-            } else {
-                i--;
-            }
+    private int points = 0;
+    private final int max_points = 3000; //based on defined max points when config new game
+    private void getIncrementalValue1(int poin) {
+        TextView text = (TextView)findViewById(R.id.number_3);
+        if(points<max_points) {
+            points += poin;
+            text.setText("" + (int) points);
         }
-
-        TextView text = (TextView)findViewById(R.id.number_1);
-        text.setText(""+numbersGenerated.get(0));
-
-        text = (TextView)findViewById(R.id.number_2);
-        text.setText(""+numbersGenerated.get(1));
-
-        text = (TextView)findViewById(R.id.number_3);
-        text.setText(""+numbersGenerated.get(2));
-
-        text = (TextView)findViewById(R.id.number_4);
-        text.setText(""+numbersGenerated.get(3));
-
-        text = (TextView)findViewById(R.id.number_5);
-        text.setText(""+numbersGenerated.get(4));
-
-        text = (TextView)findViewById(R.id.number_6);
-        text.setText(""+numbersGenerated.get(5));
+        if(points>max_points){
+            points = max_points;
+            text.setText("" + (int) points);
+        }
     }
 
-    private void getIncrementalValue(long a, long b, float c, float x, float y, float z) {
-        TextView text = (TextView)findViewById(R.id.number_1);
-        text.setText(""+(int) a);
+    private void getIncrementalValue2(int poin) {
+        TextView text = (TextView)findViewById(R.id.number_3);
+        if(points<max_points) {
+            points += poin;
+            text.setText("" + (int) points);
+        }
+        if(points>max_points){
+            points = max_points;
+            text.setText("" + (int) points);
+        }
+    }
 
-        text = (TextView)findViewById(R.id.number_2);
-        text.setText(""+(int)b);
+    private void getIncrementalValue3(int poin) {
+        TextView text = (TextView)findViewById(R.id.number_3);
+        if(points<max_points) {
+            points += poin;
+            text.setText("" + (int) points);
+        }
+        if(points>max_points){
+            points = max_points;
+            text.setText("" + (int) points);
+        }
+    }
 
-        text = (TextView)findViewById(R.id.number_3);
-        text.setText(""+(int)c);
-
-        text = (TextView)findViewById(R.id.number_4);
-        text.setText(""+(int)x);
-
-        text = (TextView)findViewById(R.id.number_5);
-        text.setText(""+(int)y);
-
-        text = (TextView)findViewById(R.id.number_6);
-        text.setText(""+(int)z);
+    private void getIncrementalValue4(int poin) {
+        TextView text = (TextView)findViewById(R.id.number_3);
+        if(points<max_points) {
+            points += poin;
+            text.setText("" + (int) points);
+        }
+        if(points>max_points){
+            points = max_points;
+            text.setText("" + (int) points);
+        }
     }
 }
