@@ -6,4 +6,29 @@
     android:layout_height="match_parent"
     tools:context="go.bolang.www.bolang_go.ShakeActivity">
 
+    <TextView
+        android:id="@+id/textView9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Silahkan Coba Kocok HP anda"
+        tools:layout_editor_absoluteX="99dp"
+        tools:layout_editor_absoluteY="28dp" />
+
+    <TextView
+        android:id="@+id/textView9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Maka di bawah ini akan ditampilkan valuenya"
+        tools:layout_editor_absoluteX="54dp"
+        tools:layout_editor_absoluteY="80dp" />
+
+    <EditText
+        android:id="@+id/editText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="number"
+        tools:layout_editor_absoluteY="257dp"
+        tools:layout_editor_absoluteX="85dp" />
+
 </android.support.constraint.ConstraintLayout>

@@ -39,6 +39,15 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        Button buttonShake = (Button) findViewById(R.id.btn_shake);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, ShakeActivity.class);
+                startActivity(intent);
+            }
+        });
+
         Button logoutBtn = (Button) findViewById(R.id.btn_logout);
         logoutBtn.setOnClickListener(new View.OnClickListener() {
             @Override

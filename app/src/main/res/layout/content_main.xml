@@ -11,46 +11,46 @@
     <RelativeLayout
         android:layout_width="0dp"
         android:layout_height="0dp"
-        tools:layout_constraintTop_creator="1"
-        tools:layout_constraintRight_creator="1"
-        tools:layout_constraintBottom_creator="1"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        tools:layout_constraintLeft_creator="1"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         android:background="@drawable/background"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintVertical_bias="0.0">
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0"
+        tools:layout_constraintBottom_creator="1"
+        tools:layout_constraintLeft_creator="1"
+        tools:layout_constraintRight_creator="1"
+        tools:layout_constraintTop_creator="1">
 
         <ImageView
             android:id="@+id/img_icon"
             android:layout_width="200dp"
             android:layout_height="150dp"
-            android:layout_marginTop="40dp"
-            android:src="@drawable/logo"
             android:layout_alignParentTop="true"
             android:layout_centerInParent="true"
-            tools:layout_editor_absoluteY="0dp"
-            tools:layout_editor_absoluteX="0dp" />
-=
+            android:layout_marginTop="40dp"
+            android:src="@drawable/logo"
+            tools:layout_editor_absoluteX="0dp"
+            tools:layout_editor_absoluteY="0dp" />
+        =
 
         <Button
             android:id="@+id/btn_buat_permainan"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
             android:layout_below="@+id/img_icon"
             android:layout_centerInParent="true"
-            android:layout_width="200dp"
-            android:height="100dp"
             android:layout_marginBottom="10dp"
-            android:layout_height="wrap_content"
-            android:bottomRightRadius="50dp"
+            android:height="100dp"
             android:bottomLeftRadius="50dp"
+            android:bottomRightRadius="50dp"
+            android:onClick="toBuatPermainan"
+            android:text="Buat Permainan"
             android:topLeftRadius="50dp"
             android:topRightRadius="50dp"
-            android:text="Buat Permainan"
-            android:onClick="toBuatPermainan"
-            tools:layout_editor_absoluteY="0dp"
-            tools:layout_editor_absoluteX="8dp" />
+            tools:layout_editor_absoluteX="8dp"
+            tools:layout_editor_absoluteY="0dp" />
 
         <Button
             android:id="@+id/btn_gabung_permainan"
@@ -69,16 +69,34 @@
             tools:layout_editor_absoluteX="8dp"
             tools:layout_editor_absoluteY="0dp" />
 
-        <TextView
+        <Button
+            android:id="@+id/btn_shake"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/btn_gabung_permainan"
+            android:height="50dp"
+            android:bottomLeftRadius="50dp"
+            android:bottomRightRadius="50dp"
+            android:text="Coba Fitur Shake"
+            android:topLeftRadius="50dp"
+            android:topRightRadius="50dp"
+            tools:layout_editor_absoluteX="8dp"
+            tools:layout_editor_absoluteY="0dp"
+            android:layout_above="@+id/textView8"
             android:layout_centerInParent="true"
+            android:layout_marginBottom="12dp" />
+
+        <TextView
+            android:id="@+id/textView8"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:text="Cara Bermain"
             android:textAlignment="center"
-            android:layout_marginTop="10dp"
-            android:textSize="15dp"
             android:textColor="#dddddd"
-            android:text="Cara Bermain"/>
+            android:textSize="15dp"
+            android:layout_above="@+id/btn_logout"
+            android:layout_alignLeft="@+id/btn_gabung_permainan"
+            android:layout_alignStart="@+id/btn_gabung_permainan"
+            android:layout_marginBottom="20dp" />
 
         <Button
             android:id="@+id/btn_logout"
