@@ -30,24 +30,6 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
-        Button button = (Button) findViewById(R.id.btn_gabung_permainan);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, BolangActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        Button buttonShake = (Button) findViewById(R.id.btn_shake);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, ShakeActivity.class);
-                startActivity(intent);
-            }
-        });
-
         Button logoutBtn = (Button) findViewById(R.id.btn_logout);
         logoutBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,10 +42,23 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-   public void toBuatPermainan(View view) {
-       Intent intent = new Intent(MainActivity.this, BuatPermainanActivity.class);
-       startActivity(intent);
-   }
+    public void toGabungPermainan(View view) {
+        Intent intent = new Intent(MainActivity.this, GabungPermainanActivity.class);
+        startActivity(intent);
+    }
 
+    public void toBuatPermainan(View view) {
+        Intent intent = new Intent(MainActivity.this, BuatPermainanActivity.class);
+        startActivity(intent);
+    }
 
+    public void toCobaShake(View view) {
+        Intent intent = new Intent(MainActivity.this, ShakeActivity.class);
+        startActivity(intent);
+    }
+
+    public void toCobaMap(View view) {
+        Intent intent = new Intent(MainActivity.this, BolangActivity.class);
+        startActivity(intent);
+    }
 }

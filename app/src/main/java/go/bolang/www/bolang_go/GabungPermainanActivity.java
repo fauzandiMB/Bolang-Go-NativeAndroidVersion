@@ -1,9 +1,11 @@
 package go.bolang.www.bolang_go;
 
+import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 
 import com.google.zxing.Result;
 
@@ -38,13 +40,20 @@ public class GabungPermainanActivity  extends AppCompatActivity implements ZXing
         // Do something with the result here
         Log.v("TAG", rawResult.getText()); // Prints scan results
         Log.v("TAG", rawResult.getBarcodeFormat().toString()); // Prints the scan format (qrcode, pdf417 etc.)
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Scan Result");
-        builder.setMessage(rawResult.getText());
-        AlertDialog alert1 = builder.create();
-        alert1.show();
+
+        this.toGabungPermainan();
+//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//        builder.setTitle("Scan Result");
+//        builder.setMessage(rawResult.getText());
+//        AlertDialog alert1 = builder.create();
+//        alert1.show();
 
         // If you would like to resume scanning, call this method below:
-        mScannerView.resumeCameraPreview(this);
+//        mScannerView.resumeCameraPreview(this);
+    }
+
+    public void toGabungPermainan() {
+        Intent intent = new Intent(GabungPermainanActivity.this, BuatPermainan2Activity.class);
+        startActivity(intent);
     }
 }

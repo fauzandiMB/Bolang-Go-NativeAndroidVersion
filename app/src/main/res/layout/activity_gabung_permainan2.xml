@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="go.bolang.www.bolang_go.GabungPermainan2Activity">
+
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/background_admin"
+        android:padding="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0"
+        tools:layout_constraintBottom_creator="1"
+        tools:layout_constraintLeft_creator="1"
+        tools:layout_constraintRight_creator="1"
+        tools:layout_constraintTop_creator="1">
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true">
+
+            <TextView
+                android:id="@+id/label_scan_berhasil"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="60dp"
+                android:textAlignment="center"
+                android:fontFamily=""
+                android:text="Scan berhasil!\n Kamu akan bergabung kedalam permainan 'Asyik'"
+                android:textColor="#000000"
+                android:textSize="12dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/label_isi_nama"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/label_scan_berhasil"
+                android:layout_centerInParent="true"
+                android:text="Isi dulu nama kamu yuk!"
+                android:textAlignment="center"
+                android:textColor="#000000"
+                android:layout_marginTop="20dp"
+                android:textSize="10dp" />
+
+            <TextView
+                android:id="@+id/label_nama_pemain"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:layout_below="@+id/label_isi_nama"
+                android:layout_centerInParent="true"
+                android:text="Nama Pemain:"
+                android:textColor="#000000"
+                android:textStyle="bold"
+                android:textAlignment="center"
+                android:textSize="13dp" />
+
+            <EditText
+                android:id="@+id/input_nama_pemain"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginTop="10dp"
+                android:layout_below="@+id/label_nama_pemain"
+                android:layout_centerInParent="true"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:background="#eeeeee"/>
+
+        <Button
+            android:id="@+id/btn_next"
+            android:layout_alignParentBottom="true"
+            android:layout_centerInParent="true"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="#eeeeee"
+            android:text="Bergabung"
+            android:onClick="toMap"
+            android:height="125dp" />
+    </RelativeLayout>
+    </RelativeLayout>
+</android.support.constraint.ConstraintLayout>
