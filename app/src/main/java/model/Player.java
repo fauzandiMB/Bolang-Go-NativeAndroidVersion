@@ -11,7 +11,7 @@ import java.io.Serializable;
 public class Player implements Serializable {
     public String id;
     public String namePlayer;
-    public LatLng position;
+    public Position position;
     public Double indexChallenge;
     public Double collectedCoin;
     public Double answeredQuiz;
@@ -22,7 +22,7 @@ public class Player implements Serializable {
         this.indexChallenge = indexChallenge;
         this.collectedCoin = collectedCoin;
         this.answeredQuiz = answeredQuiz;
-        this.position = new LatLng(lat, lng);
+        this.position = new Position(lat, lng);
     }
 
     public Player(String id, Double lat, Double lng) {
@@ -31,7 +31,7 @@ public class Player implements Serializable {
         this.indexChallenge = 0.0;
         this.collectedCoin = 0.0;
         this.answeredQuiz = 0.0;
-        this.position = new LatLng(lat, lng);
+        this.position = new Position(lat, lng);
     }
 
     public Player(String id) {
@@ -40,7 +40,7 @@ public class Player implements Serializable {
         this.indexChallenge = 0.0;
         this.collectedCoin = 0.0;
         this.answeredQuiz = 0.0;
-        this.position = new LatLng(0,0);
+        this.position = new Position();
     }
     public Player(String id, String namePlayer) {
         this.id = id;
@@ -48,12 +48,12 @@ public class Player implements Serializable {
         this.indexChallenge = 0.0;
         this.collectedCoin = 0.0;
         this.answeredQuiz = 0.0;
-        this.position = new LatLng(0,0);
+        this.position = new Position();
     }
 
     public Player() {}
 
-    public Player(String id, String namePlayer, LatLng pos, Double indexChallenge, Double collectedCoin, Double answeredQuiz){
+    public Player(String id, String namePlayer, Position pos, Double indexChallenge, Double collectedCoin, Double answeredQuiz){
         this.id = id;
         this.namePlayer = namePlayer;
         this.indexChallenge = indexChallenge;
@@ -62,7 +62,7 @@ public class Player implements Serializable {
         this.position = pos;
     }
 
-    public Player(String id, String namePlayer, LatLng pos){
+    public Player(String id, String namePlayer, Position pos){
         this.id = id;
         this.namePlayer = namePlayer;
         this.indexChallenge = 0.0;
@@ -85,7 +85,7 @@ public class Player implements Serializable {
 
     public void setLat(Double lat) {
         Double lng = this.position.longitude;
-        this.position = new LatLng(lat, lng);
+        this.position = new Position(lat,lng);
     }
 
     public Double getLng() {
@@ -94,14 +94,14 @@ public class Player implements Serializable {
 
     public void setLng(Double lng) {
         Double lat = this.position.latitude;
-        this.position = new LatLng(lat, lng);
+        this.position = new Position(lat,lng);
     }
 
-    public void setPos(LatLng pos){
+    public void setPos(Position pos){
         this.position = pos;
     }
 
-    public LatLng getPos(){
+    public Position getPos(){
         return this.position;
     }
 

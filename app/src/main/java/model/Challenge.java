@@ -10,7 +10,7 @@ import java.io.Serializable;
 
 public class Challenge implements Serializable {
 
-    public LatLng position;
+    public Position position;
     public String type;
     public boolean isCleared;
     public String typeQuiz;
@@ -18,7 +18,7 @@ public class Challenge implements Serializable {
     public Treasure treasure;
 
     public Challenge(){}
-    public Challenge(LatLng position, String type, String typeQuiz, boolean isCleared) {
+    public Challenge(Position position, String type, String typeQuiz, boolean isCleared) {
         this.position = position;
         this.type = type;
         this.isCleared = isCleared;
@@ -26,13 +26,13 @@ public class Challenge implements Serializable {
     }
 
     public Challenge(Double lat, Double lng, String type, String typeQuiz, boolean isCleared){
-        this.position = new LatLng(lat,lng);
+        this.position = new Position(lat, lng);
         this.type = type;
         this.isCleared = isCleared;
         this.typeQuiz = typeQuiz;
     }
 
-    public Challenge(LatLng pos, String type){
+    public Challenge(Position pos, String type){
         this.position = pos;
         this.type = type;
         this.isCleared = false;
@@ -44,7 +44,7 @@ public class Challenge implements Serializable {
 
     public void setLat(Double lat) {
         Double lng = this.position.longitude;
-        this.position = new LatLng(lat, lng);
+        this.position = new Position(lat, lng);
     }
 
     public Double getLng() {
@@ -53,7 +53,7 @@ public class Challenge implements Serializable {
 
     public void setLng(Double lng) {
         Double lat = this.position.latitude;
-        this.position = new LatLng(lat, lng);
+        this.position = new Position(lat, lng);
     }
 
     public String getType() {
@@ -64,11 +64,11 @@ public class Challenge implements Serializable {
         this.type = type;
     }
 
-    public void setPosition(LatLng pos){
+    public void setPosition(Position pos){
         this.position = pos;
     }
 
-    public LatLng getPos(){
+    public Position getPos(){
         return this.position;
     }
 
