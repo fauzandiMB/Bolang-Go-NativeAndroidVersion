@@ -13,6 +13,9 @@ import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -30,6 +33,10 @@ public class ShakeActivity extends AppCompatActivity implements SensorEventListe
     private static final int SHAKE_THRESHOLD3 = 3000;
     private static final int SHAKE_THRESHOLD4 = 6000;
 
+    private DatabaseReference mDatabase;
+    private DatabaseReference mTreasure;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,6 +45,11 @@ public class ShakeActivity extends AppCompatActivity implements SensorEventListe
         senSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         senAccelerometer = senSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         senSensorManager.registerListener(this, senAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
+
+        // Firebase Database
+        mDatabase = FirebaseDatabase.getInstance().getReference("");
+
+        mTreasure = mDatabase.child("");
     }
 
     @Override

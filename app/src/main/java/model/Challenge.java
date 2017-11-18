@@ -2,11 +2,13 @@ package model;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import java.io.Serializable;
+
 /**
  * Created by arifb on 30-Oct-17.
  */
 
-public class Challenge {
+public class Challenge implements Serializable {
     public Double lat;
     public Double lng;
     public String type;
