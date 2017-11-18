@@ -29,17 +29,16 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         };
+    }
 
-        Button logoutBtn = (Button) findViewById(R.id.btn_logout);
-        logoutBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mAuth.signOut();
-                if(mAuth.getCurrentUser() == null){
-                    finish();
-                }
-            }
-        });
+    public void logout(View view) {
+        mAuth.signOut();
+        if(mAuth.getCurrentUser() == null){
+            Intent i = new Intent(this, GLoginActivity.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(i);
+            finish();
+        }
     }
 
     public void toGabungPermainan(View view) {

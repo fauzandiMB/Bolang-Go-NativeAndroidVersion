@@ -130,6 +130,7 @@
             android:topLeftRadius="50dp"
             android:topRightRadius="50dp"
             tools:layout_editor_absoluteX="8dp"
-            tools:layout_editor_absoluteY="0dp" />
+            tools:layout_editor_absoluteY="0dp"
+            android:onClick="logout"/>
     </RelativeLayout>
 </android.support.constraint.ConstraintLayout>
