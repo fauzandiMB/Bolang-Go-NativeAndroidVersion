@@ -1,6 +1,7 @@
 package go.bolang.www.bolang_go;
 
 import android.Manifest;
+import android.content.Loader;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Build;
@@ -39,6 +40,8 @@ import java.util.List;
 
 import model.Challenge;
 import model.Constant;
+import model.DataManager;
+import model.GameInfo;
 import model.Player;
 import model.Position;
 
@@ -56,15 +59,23 @@ public class BolangActivity extends AppCompatActivity
     private DatabaseReference mDatabase;
     private DatabaseReference mChallenge;
     private List<Challenge> challenges;
-    private Challenge nearestChallange;
+    private Challenge nearestChallenge;
     private Player player;
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
+    private GameInfo gameInfo;
+    private Double radius = 10.0;// radius 10 meters
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bolang);
+
+        // set game info
+        GameInfo gi = DataManager.loadGameInfo(Constant.FILENAME_GAME_INFO, this.getApplicationContext());
+        if(gi != null){
+            gameInfo = gi;
+        }
 
         player = new Player();
 
@@ -83,6 +94,13 @@ public class BolangActivity extends AppCompatActivity
                 for(DataSnapshot snap: dataSnapshot.getChildren()){
                     Challenge challenge = snap.getValue(Challenge.class);
                     challenges.add(challenge);
+                }
+                if(gameInfo.getChallenges().isEmpty()){
+                    gameInfo.setChallenges(challenges);
+                    DataManager.saveGameInfo(gameInfo,Constant.FILENAME_GAME_INFO, getApplicationContext());
+                    Log.d(this.getClass().getName(), "add " + gameInfo.getChallenges().size() +  " challenge");
+
+                    checkNearestChallenge();
                 }
                 addMarkerChallenge();
             }
@@ -203,6 +221,10 @@ public class BolangActivity extends AppCompatActivity
         player.setId(id);
         player.setDisplayName(namePlayer);
         mDatabase.child(Constant.DB_PLAYERS).child(id).setValue(player);
+        if(gameInfo.getPlayer() == null){
+            gameInfo.setPlayer(player);
+            DataManager.saveGameInfo(gameInfo, Constant.FILENAME_GAME_INFO, this.getApplicationContext());
+        }
     }
 
     @Override
@@ -246,6 +268,7 @@ public class BolangActivity extends AppCompatActivity
 
     @Override
     public void onLocationChanged(Location location) {
+        Log.d(this.getClass().getName(), "Location has been changed");
         lastLocation = location;
 
         if(currentLocationMarker != null){
@@ -263,9 +286,7 @@ public class BolangActivity extends AppCompatActivity
         mDatabase.child(Constant.DB_PLAYERS).child(mAuth.getCurrentUser().getUid()).child(Constant.DB_LATITUDE).setValue(location.getLatitude());
         mDatabase.child(Constant.DB_PLAYERS).child(mAuth.getCurrentUser().getUid()).child(Constant.DB_LONGITUDE).setValue(location.getLongitude());
 
-        nearestChallange = getNearestChallange();
-        // Debug nearest challange and get distance to player
-        if(nearestChallange != null)Log.d(this.getClass().getName(), "Nearnest challenge is " + nearestChallange.getType()  + " distance = " + nearestChallange.getDistance(lastLocation));
+        checkNearestChallenge();
 
         if(client != null){
             LocationServices.FusedLocationApi.removeLocationUpdates(client, this);
@@ -278,22 +299,41 @@ public class BolangActivity extends AppCompatActivity
         return false;
     }
 
-    public Challenge getNearestChallange(){
+    public void checkNearestChallenge(){
+        nearestChallenge = getNearestChallenge();
+        //Log.d(this.getClass().getName(), "Nearnest challenge is null? " + (nearestChallenge == null));
+        // Debug nearest challange and get distance to player
+        if(nearestChallenge != null){
+            Log.d(this.getClass().getName(), "Nearnest challenge is " + nearestChallenge.getType()  + " distance = " + nearestChallenge.getDistance(lastLocation));
+
+            // Check if distance uncleared challenge less then radius
+            if(nearestChallenge.getDistance(lastLocation) <= radius){
+
+            }
+        }
+    }
+
+    public Challenge getNearestChallenge(){
         if(lastLocation == null) return  null;
         Float nearest = Float.MAX_VALUE;
         Challenge nearChallange = null;
-        for(int i = 0; i < challenges.size(); i++){
-            Challenge challenge =  challenges.get(i);
+        Log.d("GameInfo", "Size of game info challenge is " + gameInfo.getChallenges().size());
+        for(int i = 0; i < gameInfo.getChallenges().size(); i++){
+            Challenge challenge =  gameInfo.getChallenges().get(i);
             Location challengeLocation = new Location("Challenge-" + i);
             challengeLocation.setLatitude(challenge.getPosition().getLatitude());
             challengeLocation.setLongitude(challenge.getPosition().getLongitude());
 
             Float distance = lastLocation.distanceTo(challengeLocation);
-            if(distance <= nearest && challenge.isCleared() == false){
+            if(distance <= nearest && !challenge.isCleared()){
                 nearChallange = challenge;
                 nearest = distance;
             }
         }
         return  nearChallange;
+    }
+
+    public void openChallenge(Challenge challenge){
+
     }
 }

@@ -1,10 +1,12 @@
 package model;
 
+import java.io.Serializable;
+
 /**
  * Created by arifb on 18-Nov-17.
  */
 
-public class Position {
+public class Position implements Serializable {
     public Double latitude;
     public Double longitude;
 

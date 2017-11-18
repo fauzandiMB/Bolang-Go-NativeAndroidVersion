@@ -11,7 +11,7 @@ import java.io.Serializable;
  */
 
 public class Challenge implements Serializable {
-
+    public Double index;
     public Position position;
     public String type;
     public boolean isCleared;
@@ -21,7 +21,8 @@ public class Challenge implements Serializable {
 
     public Challenge(){}
 
-    public Challenge(Position position, String type, boolean isCleared, String typeQuiz, Quiz quiz, Treasure treasure) {
+    public Challenge(Double index, Position position, String type, boolean isCleared, String typeQuiz, Quiz quiz, Treasure treasure) {
+        this.index = index;
         this.position = position;
         this.type = type;
         this.isCleared = isCleared;
@@ -77,6 +78,10 @@ public class Challenge implements Serializable {
     public void setTreasure(Treasure treasure) {
         this.treasure = treasure;
     }
+
+    public Double getIndex() {return index;}
+
+    public void setIndex(Double index) {this.index = index;}
 
     public Double getDistance(Location playerLocation){
         if(playerLocation == null) return Double.MAX_VALUE;
