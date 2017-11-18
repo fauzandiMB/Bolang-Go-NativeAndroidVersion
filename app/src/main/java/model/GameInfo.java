@@ -11,6 +11,14 @@ public class GameInfo implements Serializable {
     public Player player;
     public Challenge challenge;
 
+    public GameInfo(){}
+    public GameInfo(String gameName) {
+        this.gameName = gameName;
+    }
+    public GameInfo(String gameName, Player player) {
+        this.gameName = gameName;
+        this.player = player;
+    }
     public GameInfo(String gameName, Player player, Challenge challenge) {
         this.gameName = gameName;
         this.player = player;

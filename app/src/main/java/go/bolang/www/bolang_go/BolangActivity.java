@@ -10,6 +10,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -26,6 +27,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -43,7 +45,7 @@ public class BolangActivity extends AppCompatActivity
         implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
-        LocationListener {
+        LocationListener, GoogleMap.OnMarkerClickListener {
     private GoogleMap mMap;
     private GoogleApiClient client;
     private LocationRequest locationRequest;
@@ -80,7 +82,7 @@ public class BolangActivity extends AppCompatActivity
                     Challenge challenge = snap.getValue(Challenge.class);
                     challenges.add(challenge);
                 }
-                addmarkerChallenge();
+                addMarkerChallenge();
             }
 
             @Override
@@ -91,13 +93,15 @@ public class BolangActivity extends AppCompatActivity
 
         // Firebase Auth
         mAuth = FirebaseAuth.getInstance();
-        addPlayer(mAuth.getCurrentUser().getUid());
+        FirebaseUser user = mAuth.getCurrentUser();
+        if(user != null) addPlayer(user.getUid(), user.getDisplayName());
+
 
         //check permission
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
             checkLocationPersmission();
         }else {
-
+            Log.d(this.getClass().getName(),"Udah di install permissionya");
         }
         // add to support fragment
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -141,7 +145,7 @@ public class BolangActivity extends AppCompatActivity
 
     }
 
-    public void addmarkerChallenge(){
+    public void addMarkerChallenge(){
         challengesMarkers.clear();
         for(int i = 0; i < challenges.size(); i++){
             Challenge challenge = challenges.get(i);
@@ -179,6 +183,7 @@ public class BolangActivity extends AppCompatActivity
             }
             challengesMarkers.add(mMap.addMarker(markerOptions));
         }
+        mMap.setOnMarkerClickListener(this);
     }
 
     protected synchronized void buildClientApi() {
@@ -190,8 +195,8 @@ public class BolangActivity extends AppCompatActivity
         client.connect();
     }
 
-    public void addPlayer(String id){
-        player = new Player(id);
+    public void addPlayer(String id, String namePlayer){
+        player = new Player(id, namePlayer);
         mDatabase.child(Constant.DB_PLAYERS).child(id).setValue(player);
     }
 
@@ -257,5 +262,12 @@ public class BolangActivity extends AppCompatActivity
             LocationServices.FusedLocationApi.removeLocationUpdates(client, this);
         }
 
+    }
+
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+
+
+        return false;
     }
 }

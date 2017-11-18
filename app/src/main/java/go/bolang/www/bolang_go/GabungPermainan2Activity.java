@@ -4,9 +4,18 @@ import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
-public class GabungPermainan2Activity extends AppCompatActivity {
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.Serializable;
+
+import model.GameInfo;
+
+public class GabungPermainan2Activity extends AppCompatActivity{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +32,25 @@ public class GabungPermainan2Activity extends AppCompatActivity {
             AlertDialog alert1 = builder.create();
             alert1.show();
         }
+
+
+        try {
+            FileInputStream fis = this.openFileInput("GameInfo");
+            ObjectInputStream is = new ObjectInputStream(fis);
+            GameInfo gameInfo = (GameInfo) is.readObject();
+            Log.d(this.getClass().getName(), "gabung permainan " + gameInfo.gameName);
+            is.close();
+            fis.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+
+        Log.d(this.getClass().getName(), "gabung permainan 2");
 
         setContentView(R.layout.activity_gabung_permainan2);
     }
