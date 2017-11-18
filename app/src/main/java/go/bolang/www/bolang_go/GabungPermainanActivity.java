@@ -1,7 +1,11 @@
 package go.bolang.www.bolang_go;
 
+import android.*;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -29,6 +33,13 @@ public class GabungPermainanActivity  extends AppCompatActivity implements ZXing
         mScannerView = new ZXingScannerView(this);   // Programmatically initialize the scanner view
         setContentView(mScannerView);
         Log.d(this.getClass().getName(), "gabung permainan 1");
+        //check permission
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+            checkCameraPermission();
+        }else {
+            Log.d(this.getClass().getName(),"Udah di install permissionya");
+        }
     }
 
     @Override
@@ -84,6 +95,18 @@ public class GabungPermainanActivity  extends AppCompatActivity implements ZXing
         Intent intent = new Intent(GabungPermainanActivity.this, GabungPermainan2Activity.class);
         intent.putExtra("code", code);
         startActivity(intent);
+    }
+
+    public boolean checkCameraPermission(){
+        if(ActivityCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
+            if(ActivityCompat.shouldShowRequestPermissionRationale(this, android.Manifest.permission.CAMERA)){
+                ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.CAMERA}, 3);
+            }else{
+                ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.CAMERA}, 3);
+            }
+            return false;
+        }else
+            return true;
     }
 
 }
