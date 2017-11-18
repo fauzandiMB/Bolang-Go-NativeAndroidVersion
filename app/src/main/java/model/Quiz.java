@@ -2,6 +2,8 @@ package model;
 
 import android.util.Log;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.io.Serializable;
 
 /**
@@ -44,6 +46,16 @@ public class Quiz implements Serializable {
         }
     }
 
+    public String getChoice(int index){
+        try {
+            String choice = this.choices[index];
+            return choice;
+        }catch (Exception e){
+            Log.e(this.getClass().getName(), "error idk cari sendiri ya");
+        }
+        return null;
+    }
+
     public void setChoices(String[] choices) {
         this.choices = choices;
     }
@@ -55,6 +67,5 @@ public class Quiz implements Serializable {
     public void setRightIndex(Double rightIndex) {
         this.rightIndex = rightIndex;
     }
-
 
 }

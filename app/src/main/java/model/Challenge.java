@@ -9,47 +9,51 @@ import java.io.Serializable;
  */
 
 public class Challenge implements Serializable {
-    public Double lat;
-    public Double lng;
+
+    public LatLng position;
     public String type;
-    public String quiz;
-    public Double maxPoint;
     public boolean isCleared;
+    public String typeQuiz;
+    public Quiz quiz;
+    public Treasure treasure;
 
     public Challenge(){}
-
-    public Challenge(Double lat, Double lng, String type, String quiz, Double maxPoint, boolean isCleared){
-        this.lat = lat;
-        this.lng = lng;
+    public Challenge(LatLng position, String type, String typeQuiz, boolean isCleared) {
+        this.position = position;
         this.type = type;
-        this.quiz = quiz;
-        this.maxPoint = maxPoint;
         this.isCleared = isCleared;
+        this.typeQuiz = typeQuiz;
     }
 
-    public Challenge(LatLng pos, String type, String quiz, Double maxPoint){
-        this.lat = pos.latitude;
-        this.lng = pos.longitude;
+    public Challenge(Double lat, Double lng, String type, String typeQuiz, boolean isCleared){
+        this.position = new LatLng(lat,lng);
         this.type = type;
-        this.quiz = quiz;
-        this.maxPoint = maxPoint;
+        this.isCleared = isCleared;
+        this.typeQuiz = typeQuiz;
+    }
+
+    public Challenge(LatLng pos, String type){
+        this.position = pos;
+        this.type = type;
         this.isCleared = false;
     }
 
     public Double getLat() {
-        return lat;
+        return this.position.latitude;
     }
 
     public void setLat(Double lat) {
-        this.lat = lat;
+        Double lng = this.position.longitude;
+        this.position = new LatLng(lat, lng);
     }
 
     public Double getLng() {
-        return lng;
+        return this.position.longitude;
     }
 
     public void setLng(Double lng) {
-        this.lng = lng;
+        Double lat = this.position.latitude;
+        this.position = new LatLng(lat, lng);
     }
 
     public String getType() {
@@ -60,30 +64,20 @@ public class Challenge implements Serializable {
         this.type = type;
     }
 
-    public String getQuiz() {
-        return quiz;
-    }
-
-    public void setQuiz(String quiz) {
-        this.quiz = quiz;
-    }
-
-    public Double getMaxPoint() {
-        return maxPoint;
-    }
-
-    public void setMaxPoint(Double maxPoint) {
-        this.maxPoint = maxPoint;
-    }
-
     public void setPosition(LatLng pos){
-        this.lat = pos.latitude;
-        this.lng = pos.longitude;
+        this.position = pos;
     }
 
     public LatLng getPos(){
-        return new LatLng(lat, lng);
+        return this.position;
     }
 
+    public Object getChallenge(){
+        if(type == Constant.QUIZ_CHALLENGE){
+            return quiz;
+        }else{
+            return treasure;
+        }
+    }
 
 }

@@ -15,6 +15,11 @@ public class Treasure implements Serializable {
         this.maxCoin = maxCoin;
     }
 
+    public Treasure(Double maxCoin, Double timeCount) {
+        this.maxCoin = maxCoin;
+        this.timeCount = timeCount;
+    }
+
     public Double getMaxCoin() {
         return maxCoin;
     }
