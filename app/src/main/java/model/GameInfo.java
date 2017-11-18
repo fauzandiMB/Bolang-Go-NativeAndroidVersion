@@ -1,5 +1,14 @@
 package model;
 
+import android.content.Context;
+import android.util.Log;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
 /**
@@ -25,6 +34,7 @@ public class GameInfo implements Serializable {
         this.challenge = challenge;
     }
 
+
     public String getGameName() {
         return gameName;
     }
@@ -48,7 +58,5 @@ public class GameInfo implements Serializable {
     public void setChallenge(Challenge challenge) {
         this.challenge = challenge;
     }
-
-
 }
 

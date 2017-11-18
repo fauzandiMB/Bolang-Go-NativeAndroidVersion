@@ -14,6 +14,7 @@ import java.io.ObjectInputStream;
 import java.io.Serializable;
 
 import model.Constant;
+import model.DataManager;
 import model.GameInfo;
 
 public class GabungPermainan2Activity extends AppCompatActivity{
@@ -34,22 +35,10 @@ public class GabungPermainan2Activity extends AppCompatActivity{
             alert1.show();
         }
 
-
-        try {
-            FileInputStream fis = this.openFileInput(Constant.FILENAME_GAME_INFO);
-            ObjectInputStream is = new ObjectInputStream(fis);
-            gameInfo = (GameInfo) is.readObject();
-            Log.d(this.getClass().getName(), "gabung permainan " + gameInfo.gameName);
-            is.close();
-            fis.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+        GameInfo gi = DataManager.loadGameInfo(Constant.FILENAME_GAME_INFO, this.getApplicationContext());
+        if(gi != null){
+            gameInfo = gi;
         }
-
 
         Log.d(this.getClass().getName(), "gabung permainan 2");
 
