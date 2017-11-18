@@ -1,4 +1,4 @@
-package go.bolang.www.bolang_go;
+package model;
 
 import com.google.android.gms.maps.model.LatLng;
 

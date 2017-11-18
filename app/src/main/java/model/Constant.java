@@ -1,4 +1,4 @@
-package go.bolang.www.bolang_go;
+package model;
 
 /**
  * Created by arifb on 30-Oct-17.
