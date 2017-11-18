@@ -112,7 +112,7 @@
             android:layout_height="50dp"
             android:background="#eeeeee"
             android:text="Lanjut"
-            android:onClick="toGabungPermainan2"
+            android:onClick="toBuatPermainan2"
             android:height="125dp" />
     </RelativeLayout>
 </android.support.constraint.ConstraintLayout>

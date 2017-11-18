@@ -63,8 +63,9 @@
         </activity>
         <activity
             android:name=".ShakeActivity"
-            android:screenOrientation="portrait"></activity>
-        <activity android:name=".GabungPermainan2Activity"></activity>
+            android:screenOrientation="portrait" />
+        <activity android:name=".GabungPermainan2Activity" />
+        <activity android:name=".BuatPermainan3Activity"></activity>
     </application>
 
 </manifest>

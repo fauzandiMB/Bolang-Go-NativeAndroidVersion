@@ -13,7 +13,7 @@ public class BuatPermainanActivity extends AppCompatActivity {
         setContentView(R.layout.activity_buat_permainan);
     }
 
-    public void toGabungPermainan2(View view) {
+    public void toBuatPermainan2(View view) {
         Intent intent = new Intent(BuatPermainanActivity.this, BuatPermainan2Activity.class);
         startActivity(intent);
     }
