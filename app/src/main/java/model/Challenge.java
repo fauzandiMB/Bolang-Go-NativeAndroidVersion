@@ -1,5 +1,7 @@
 package model;
 
+import android.location.Location;
+
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.Serializable;
@@ -74,5 +76,12 @@ public class Challenge implements Serializable {
 
     public void setTreasure(Treasure treasure) {
         this.treasure = treasure;
+    }
+
+    public Double getDistance(Location playerLocation){
+        if(playerLocation == null) return Double.MAX_VALUE;
+        Location location =  new Location("Challenge-Location");
+        Float distance = playerLocation.distanceTo(location);
+        return Double.parseDouble(distance.toString());
     }
 }
