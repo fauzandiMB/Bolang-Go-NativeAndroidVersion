@@ -40,6 +40,7 @@ import java.util.List;
 import model.Challenge;
 import model.Constant;
 import model.Player;
+import model.Position;
 
 public class BolangActivity extends AppCompatActivity
         implements OnMapReadyCallback,
@@ -150,7 +151,7 @@ public class BolangActivity extends AppCompatActivity
         for(int i = 0; i < challenges.size(); i++){
             Challenge challenge = challenges.get(i);
             MarkerOptions markerOptions = new MarkerOptions();
-            markerOptions.position(challenge.getPos());
+            markerOptions.position(new LatLng(challenge.getPosition().latitude, challenge.getPosition().longitude));
             markerOptions.title(challenge.getType());
             switch (i){
                 case 0:
@@ -196,7 +197,9 @@ public class BolangActivity extends AppCompatActivity
     }
 
     public void addPlayer(String id, String namePlayer){
-        player = new Player(id, namePlayer);
+        player = new Player();
+        player.setId(id);
+        player.setDisplayName(namePlayer);
         mDatabase.child(Constant.DB_PLAYERS).child(id).setValue(player);
     }
 
@@ -252,7 +255,7 @@ public class BolangActivity extends AppCompatActivity
         mMap.animateCamera(CameraUpdateFactory.zoomBy(17));
 
         // set player position
-        player.setPos(latlang);
+        player.setPosition(new Position(latlang.latitude, latlang.longitude));
 
         //Firebase Database update position player
         mDatabase.child(Constant.DB_PLAYERS).child(mAuth.getCurrentUser().getUid()).child(Constant.DB_LATITUDE).setValue(location.getLatitude());

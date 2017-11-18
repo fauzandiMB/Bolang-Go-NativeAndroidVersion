@@ -18,42 +18,22 @@ public class Challenge implements Serializable {
     public Treasure treasure;
 
     public Challenge(){}
-    public Challenge(Position position, String type, String typeQuiz, boolean isCleared) {
+
+    public Challenge(Position position, String type, boolean isCleared, String typeQuiz, Quiz quiz, Treasure treasure) {
         this.position = position;
         this.type = type;
         this.isCleared = isCleared;
         this.typeQuiz = typeQuiz;
+        this.quiz = quiz;
+        this.treasure = treasure;
     }
 
-    public Challenge(Double lat, Double lng, String type, String typeQuiz, boolean isCleared){
-        this.position = new Position(lat, lng);
-        this.type = type;
-        this.isCleared = isCleared;
-        this.typeQuiz = typeQuiz;
+    public Position getPosition() {
+        return position;
     }
 
-    public Challenge(Position pos, String type){
-        this.position = pos;
-        this.type = type;
-        this.isCleared = false;
-    }
-
-    public Double getLat() {
-        return this.position.latitude;
-    }
-
-    public void setLat(Double lat) {
-        Double lng = this.position.longitude;
-        this.position = new Position(lat, lng);
-    }
-
-    public Double getLng() {
-        return this.position.longitude;
-    }
-
-    public void setLng(Double lng) {
-        Double lat = this.position.latitude;
-        this.position = new Position(lat, lng);
+    public void setPosition(Position position) {
+        this.position = position;
     }
 
     public String getType() {
@@ -64,20 +44,35 @@ public class Challenge implements Serializable {
         this.type = type;
     }
 
-    public void setPosition(Position pos){
-        this.position = pos;
+    public boolean isCleared() {
+        return isCleared;
     }
 
-    public Position getPos(){
-        return this.position;
+    public void setCleared(boolean cleared) {
+        isCleared = cleared;
     }
 
-    public Object getChallenge(){
-        if(type == Constant.QUIZ_CHALLENGE){
-            return quiz;
-        }else{
-            return treasure;
-        }
+    public String getTypeQuiz() {
+        return typeQuiz;
     }
 
+    public void setTypeQuiz(String typeQuiz) {
+        this.typeQuiz = typeQuiz;
+    }
+
+    public Quiz getQuiz() {
+        return quiz;
+    }
+
+    public void setQuiz(Quiz quiz) {
+        this.quiz = quiz;
+    }
+
+    public Treasure getTreasure() {
+        return treasure;
+    }
+
+    public void setTreasure(Treasure treasure) {
+        this.treasure = treasure;
+    }
 }
