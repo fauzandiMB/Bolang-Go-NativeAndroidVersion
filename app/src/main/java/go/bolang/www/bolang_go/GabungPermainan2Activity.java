@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
 
+import model.Constant;
 import model.GameInfo;
 
 public class GabungPermainan2Activity extends AppCompatActivity{
@@ -35,7 +36,7 @@ public class GabungPermainan2Activity extends AppCompatActivity{
 
 
         try {
-            FileInputStream fis = this.openFileInput("GameInfo");
+            FileInputStream fis = this.openFileInput(Constant.FILENAME_GAME_INFO);
             ObjectInputStream is = new ObjectInputStream(fis);
             GameInfo gameInfo = (GameInfo) is.readObject();
             Log.d(this.getClass().getName(), "gabung permainan " + gameInfo.gameName);

@@ -17,5 +17,5 @@ public class Constant {
     public static final String DB_MASTER_NAME = "id-master";
     public static final String DB_LATITUDE = "lat";
     public static final String DB_LONGITUDE = "lng";
-
+    public static final String FILENAME_GAME_INFO = "GameInfo";
 }

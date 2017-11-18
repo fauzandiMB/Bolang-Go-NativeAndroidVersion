@@ -16,6 +16,7 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
+import model.Constant;
 import model.GameInfo;
 
 public class GabungPermainanActivity  extends AppCompatActivity implements ZXingScannerView.ResultHandler {
@@ -56,7 +57,7 @@ public class GabungPermainanActivity  extends AppCompatActivity implements ZXing
 
 
         try {
-            FileOutputStream fos = openFileOutput("GameInfo", Context.MODE_PRIVATE);
+            FileOutputStream fos = openFileOutput(Constant.FILENAME_GAME_INFO, Context.MODE_PRIVATE);
                     //this.openFileOutput("GameInfo", Context.MODE_PRIVATE);
             ObjectOutputStream os = new ObjectOutputStream(fos);
             os.writeObject(gameInfo);
