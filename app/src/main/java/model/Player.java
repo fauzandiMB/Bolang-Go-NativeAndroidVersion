@@ -16,6 +16,7 @@ public class Player implements Serializable {
     public Double index;
     public Double collectedCoin;
     public Double answeredQuiz;
+    public LatLng position;
 
     public Player(String id, Double lat, Double lng, Double index, Double collectedCoin, Double answeredQuiz) {
         this.id = id;
@@ -24,6 +25,7 @@ public class Player implements Serializable {
         this.index = index;
         this.collectedCoin = collectedCoin;
         this.answeredQuiz = answeredQuiz;
+        this.position = new LatLng(0, 3);
     }
 
     public Player(String id, Double lat, Double lng) {

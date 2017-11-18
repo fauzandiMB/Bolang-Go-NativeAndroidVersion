@@ -68,7 +68,7 @@ public class BolangActivity extends AppCompatActivity
         challengesMarkers = new ArrayList<Marker>();
 
         // Firebase Database
-        mDatabase = FirebaseDatabase.getInstance().getReference("TestGame");
+        mDatabase = FirebaseDatabase.getInstance().getReference("Game").child("TestGame");
 
         mChallenge = mDatabase.child("challenges");
 
