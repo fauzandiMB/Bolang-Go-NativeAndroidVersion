@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
@@ -36,6 +37,8 @@ public class ShakeActivity extends AppCompatActivity implements SensorEventListe
     private DatabaseReference mDatabase;
     private DatabaseReference mTreasure;
 
+    private Button buttonMulai;
+    private boolean sudahMulai = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +48,7 @@ public class ShakeActivity extends AppCompatActivity implements SensorEventListe
         senSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         senAccelerometer = senSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         senSensorManager.registerListener(this, senAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
-
+        buttonMulai = (Button) findViewById(R.id.buttonMulaiShake);
         // Firebase Database
         mDatabase = FirebaseDatabase.getInstance().getReference("");
 
@@ -56,7 +59,7 @@ public class ShakeActivity extends AppCompatActivity implements SensorEventListe
     public void onSensorChanged(SensorEvent sensorEvent) {
         Sensor mySensor = sensorEvent.sensor;
 
-        if (mySensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+        if (mySensor.getType() == Sensor.TYPE_ACCELEROMETER && sudahMulai) {
             float x = sensorEvent.values[0];
             float y = sensorEvent.values[1];
             float z = sensorEvent.values[2];
@@ -183,5 +186,13 @@ public class ShakeActivity extends AppCompatActivity implements SensorEventListe
             points = max_points;
             text.setText("" + (int) points);
         }
+    }
+
+        public void mulaiShake(View view) {
+        this.sudahMulai = true;
+        buttonMulai.setEnabled(false);
+
+        //start 1 minutes timer
+
     }
 }
