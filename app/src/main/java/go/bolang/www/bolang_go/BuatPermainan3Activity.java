@@ -23,20 +23,9 @@ public class BuatPermainan3Activity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_buat_permainan3);
-
-        text2Qr = "123";
-        image_generated_qrcode = (ImageView) findViewById(R.id.image_generated_qrcode);
-
-        MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
-        try{
-            BitMatrix bitMatrix = multiFormatWriter.encode(text2Qr, BarcodeFormat.QR_CODE,200,200);
-            BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
-            Bitmap bitmap = barcodeEncoder.createBitmap(bitMatrix);
-            image_generated_qrcode.setImageBitmap(bitmap);
-        }
-        catch (WriterException e){
-            e.printStackTrace();
-        }
+        RadioButton radio1 = (RadioButton) findViewById(R.id.radio_game1);
+        radio1.setChecked(true);  
+        changeBarcode("game1");
     }
 
     public void changeBarcode(String code) {
