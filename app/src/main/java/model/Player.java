@@ -8,17 +8,20 @@ import com.google.android.gms.maps.model.LatLng;
 
 public class Player {
     public String id;
+    public String namePlayer;
     public Double lat;
     public Double lng;
     public Double index;
-    public Double poin;
+    public Double collectedCoin;
+    public Double answeredQuiz;
 
-    public Player(String id, Double lat, Double lng, Double index, Double poin) {
+    public Player(String id, Double lat, Double lng, Double index, Double collectedCoin, Double answeredQuiz) {
         this.id = id;
         this.lat = lat;
         this.lng = lng;
         this.index = index;
-        this.poin = poin;
+        this.collectedCoin = collectedCoin;
+        this.answeredQuiz = answeredQuiz;
     }
 
     public Player(String id, Double lat, Double lng) {
@@ -26,7 +29,8 @@ public class Player {
         this.lat = lat;
         this.lng = lng;
         this.index = 0.0;
-        this.poin = 0.0;
+        this.collectedCoin = 0.0;
+        this.answeredQuiz = 0.0;
     }
 
     public Player(String id) {
@@ -34,20 +38,23 @@ public class Player {
         this.lat = 0.0;
         this.lng = 0.0;
         this.index = 0.0;
-        this.poin = 0.0;
+        this.collectedCoin = 0.0;
+        this.answeredQuiz = 0.0;
     }
 
     public Player() {
         this.index = 0.0;
-        this.poin = 0.0;
+        this.collectedCoin = 0.0;
+        this.answeredQuiz = 0.0;
     }
 
-    public Player(String id, LatLng pos, Double index, Double poin){
+    public Player(String id, LatLng pos, Double index, Double collectedCoin, Double answeredQuiz){
         this.id = id;
         this.lat = pos.latitude;
         this.lng = pos.longitude;
         this.index = index;
-        this.poin = poin;
+        this.collectedCoin = collectedCoin;
+        this.answeredQuiz = answeredQuiz;
     }
 
     public Player(String id, LatLng pos){
@@ -55,7 +62,8 @@ public class Player {
         this.lat = pos.latitude;
         this.lng = pos.longitude;
         this.index = 0.0;
-        this.poin = 0.0;
+        this.collectedCoin = 0.0;
+        this.answeredQuiz = 0.0;
     }
 
     public String getId() {
@@ -99,11 +107,20 @@ public class Player {
         this.index = index;
     }
 
-    public Double getPoin() {
-        return poin;
+    public Double getCollectedCoin() {
+        return collectedCoin;
     }
 
-    public void setPoin(Double poin) {
-        this.poin = poin;
+    public void setCollectedCoin(Double collectedCoin) {
+        this.collectedCoin = collectedCoin;
     }
+
+    public Double getAnsweredQuiz() {return answeredQuiz;}
+
+    public void setAnsweredQuiz(Double answeredQuiz) { this.answeredQuiz = answeredQuiz;}
+
+    public String getNamePlayer() {return namePlayer;}
+
+    public void setNamePlayer(String namePlayer) { this.namePlayer = namePlayer;}
+
 }
