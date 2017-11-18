@@ -6,8 +6,10 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
@@ -22,6 +24,7 @@ import java.util.Random;
 
 import static android.R.attr.x;
 import static android.R.attr.y;
+import static android.icu.lang.UCharacter.GraphemeClusterBreak.T;
 
 public class ShakeActivity extends AppCompatActivity implements SensorEventListener {
     private SensorManager senSensorManager;
@@ -144,11 +147,11 @@ public class ShakeActivity extends AppCompatActivity implements SensorEventListe
         TextView text = (TextView)findViewById(R.id.number_3);
         if(points<max_points) {
             points += poin;
-            text.setText("" + (int) points);
+            text.setText("" + (int) points +"/" + (int) max_points);
         }
         if(points>max_points){
             points = max_points;
-            text.setText("" + (int) points);
+            text.setText("" + (int) points +"/" + (int) max_points);
         }
     }
 
@@ -156,11 +159,11 @@ public class ShakeActivity extends AppCompatActivity implements SensorEventListe
         TextView text = (TextView)findViewById(R.id.number_3);
         if(points<max_points) {
             points += poin;
-            text.setText("" + (int) points);
+            text.setText("" + (int) points +"/" + (int) max_points);
         }
         if(points>max_points){
             points = max_points;
-            text.setText("" + (int) points);
+            text.setText("" + (int) points +"/" + (int) max_points);
         }
     }
 
@@ -168,11 +171,11 @@ public class ShakeActivity extends AppCompatActivity implements SensorEventListe
         TextView text = (TextView)findViewById(R.id.number_3);
         if(points<max_points) {
             points += poin;
-            text.setText("" + (int) points);
+            text.setText("" + (int) points +"/" + (int) max_points);
         }
         if(points>max_points){
             points = max_points;
-            text.setText("" + (int) points);
+            text.setText("" + (int) points +"/" + (int) max_points);
         }
     }
 
@@ -180,19 +183,36 @@ public class ShakeActivity extends AppCompatActivity implements SensorEventListe
         TextView text = (TextView)findViewById(R.id.number_3);
         if(points<max_points) {
             points += poin;
-            text.setText("" + (int) points);
+            text.setText("" + (int) points +"/" + (int) max_points);
         }
         if(points>max_points){
             points = max_points;
-            text.setText("" + (int) points);
+            text.setText("" + (int) points +"/" + (int) max_points);
         }
     }
 
         public void mulaiShake(View view) {
-        this.sudahMulai = true;
-        buttonMulai.setEnabled(false);
+            this.sudahMulai = true;
+//            buttonMulai.setEnabled(false);
 
-        //start 1 minutes timer
+            View namebar = (View) findViewById(R.id.buttonMulaiShake);
+            ((ViewGroup) namebar.getParent()).removeView(namebar);
+
+            final TextView timerText = (TextView)findViewById(R.id.timer);
+
+//        start 1 minutes timer
+            new CountDownTimer(20000, 10) {
+
+                public void onTick(long millisUntilFinished) {
+                    timerText.setText((millisUntilFinished / 1000 < 10 ? ("0" + millisUntilFinished / 1000):(millisUntilFinished / 1000))  + ":" + ((millisUntilFinished % 1000 / 10) < 10 ? ("0" + millisUntilFinished % 1000 / 10):(millisUntilFinished % 1000 / 10))  );
+                }
+
+                public void onFinish() {
+                    sudahMulai = false;
+                    timerText.setTextSize(40);
+                    timerText.setText("Waktu Habis! Anda mendapatkan " + points + " koin");
+                }
+            }.start();
 
     }
 }

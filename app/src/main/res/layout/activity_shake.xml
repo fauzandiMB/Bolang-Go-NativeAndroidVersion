@@ -40,5 +40,12 @@
         android:text="Mulai"
         android:onClick="mulaiShake"/>
 
+    <TextView
+        android:id="@+id/timer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="50dp"
+        android:textAlignment="center"/>
+
 
 </LinearLayout>
