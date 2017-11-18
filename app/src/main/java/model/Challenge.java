@@ -1,6 +1,7 @@
 package model;
 
 import android.location.Location;
+import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -84,9 +85,11 @@ public class Challenge implements Serializable {
     public void setIndex(Double index) {this.index = index;}
 
     public Double getDistance(Location playerLocation){
-        if(playerLocation == null) return Double.MAX_VALUE;
         Location location =  new Location("Challenge-Location");
+        location.setLatitude(position.latitude);
+        location.setLongitude(position.longitude);
         Float distance = playerLocation.distanceTo(location);
+        Log.d(this.getClass().getName(), "Distance = " + distance + " with location = " + playerLocation.getLatitude() + ", " + playerLocation.getLongitude());
         return Double.parseDouble(distance.toString());
     }
 }

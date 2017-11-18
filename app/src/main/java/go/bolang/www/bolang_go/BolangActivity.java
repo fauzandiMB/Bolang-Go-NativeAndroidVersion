@@ -1,6 +1,7 @@
 package go.bolang.www.bolang_go;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.Loader;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -308,7 +309,8 @@ public class BolangActivity extends AppCompatActivity
 
             // Check if distance uncleared challenge less then radius
             if(nearestChallenge.getDistance(lastLocation) <= radius){
-
+                Log.d(this.getClass().getName(), "open challenge");
+                openChallenge(nearestChallenge);
             }
         }
     }
@@ -334,6 +336,12 @@ public class BolangActivity extends AppCompatActivity
     }
 
     public void openChallenge(Challenge challenge){
-
+        Log.d(this.getClass().getName(), "challenge tipe " + challenge.getType());
+        if(challenge.getType().equals(Constant.QUIZ_CHALLENGE)){
+            // dapetin quiz dari db dulu random yang penting tipe quiznya sama
+        }else if(challenge.getType().equals(Constant.TREASURE_CHALLENGE)){
+            Intent intent = new Intent(BolangActivity.this, ShakeActivity.class);
+            startActivity(intent);
+        }
     }
 }
