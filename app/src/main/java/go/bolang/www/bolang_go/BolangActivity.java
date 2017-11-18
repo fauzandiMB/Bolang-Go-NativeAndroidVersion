@@ -264,6 +264,7 @@ public class BolangActivity extends AppCompatActivity
         mDatabase.child(Constant.DB_PLAYERS).child(mAuth.getCurrentUser().getUid()).child(Constant.DB_LONGITUDE).setValue(location.getLongitude());
 
         nearestChallange = getNearestChallange();
+        // Debug nearest challange and get distance to player
         if(nearestChallange != null)Log.d(this.getClass().getName(), "Nearnest challenge is " + nearestChallange.getType()  + " distance = " + nearestChallange.getDistance(lastLocation));
 
         if(client != null){
