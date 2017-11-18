@@ -337,6 +337,8 @@ public class BolangActivity extends AppCompatActivity
 
     public void openChallenge(Challenge challenge){
         Log.d(this.getClass().getName(), "challenge tipe " + challenge.getType());
+
+        // nanti pake bundle extra aja....
         if(challenge.getType().equals(Constant.QUIZ_CHALLENGE)){
             // dapetin quiz dari db dulu random yang penting tipe quiznya sama
         }else if(challenge.getType().equals(Constant.TREASURE_CHALLENGE)){
