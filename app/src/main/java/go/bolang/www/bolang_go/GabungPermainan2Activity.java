@@ -17,7 +17,7 @@ import model.Constant;
 import model.GameInfo;
 
 public class GabungPermainan2Activity extends AppCompatActivity{
-
+    private GameInfo gameInfo;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,7 +38,7 @@ public class GabungPermainan2Activity extends AppCompatActivity{
         try {
             FileInputStream fis = this.openFileInput(Constant.FILENAME_GAME_INFO);
             ObjectInputStream is = new ObjectInputStream(fis);
-            GameInfo gameInfo = (GameInfo) is.readObject();
+            gameInfo = (GameInfo) is.readObject();
             Log.d(this.getClass().getName(), "gabung permainan " + gameInfo.gameName);
             is.close();
             fis.close();
