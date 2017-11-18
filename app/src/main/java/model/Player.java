@@ -2,11 +2,13 @@ package model;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import java.io.Serializable;
+
 /**
  * Created by arifb on 30-Oct-17.
  */
 
-public class Player {
+public class Player implements Serializable {
     public String id;
     public String namePlayer;
     public Double lat;
