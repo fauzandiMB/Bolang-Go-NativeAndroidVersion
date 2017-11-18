@@ -41,8 +41,8 @@ public class GabungPermainanActivity  extends AppCompatActivity implements ZXing
         Log.v("TAG", rawResult.getText()); // Prints scan results
         Log.v("TAG", rawResult.getBarcodeFormat().toString()); // Prints the scan format (qrcode, pdf417 etc.)
 
-        this.toGabungPermainan();
-//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        this.toGabungPermainan(rawResult.getText());
+//        AlertDialog.Builder builder = new AlertDialog.Builder(this)6;
 //        builder.setTitle("Scan Result");
 //        builder.setMessage(rawResult.getText());
 //        AlertDialog alert1 = builder.create();
@@ -52,8 +52,9 @@ public class GabungPermainanActivity  extends AppCompatActivity implements ZXing
 //        mScannerView.resumeCameraPreview(this);
     }
 
-    public void toGabungPermainan() {
-        Intent intent = new Intent(GabungPermainanActivity.this, BuatPermainan2Activity.class);
+    public void toGabungPermainan(String code) {
+        Intent intent = new Intent(GabungPermainanActivity.this, GabungPermainan2Activity.class);
+        intent.putExtra("code", code);
         startActivity(intent);
     }
 }

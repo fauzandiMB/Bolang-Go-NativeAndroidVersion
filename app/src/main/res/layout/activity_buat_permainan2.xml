@@ -266,7 +266,8 @@
                 android:id="@+id/b_Lanjut"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Lanjut" />
+                android:text="Lanjut"
+                android:onClick="toBuatPermainan3"/>
 
         </LinearLayout>
 

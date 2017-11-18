@@ -52,4 +52,9 @@ public class BuatPermainan2Activity extends AppCompatActivity implements Adapter
     public void onNothingSelected(AdapterView<?> parent) {
 
     }
+
+    public void toBuatPermainan3(View view) {
+        Intent intent = new Intent(BuatPermainan2Activity.this, BuatPermainan3Activity.class);
+        startActivity(intent);
+    }
 }
