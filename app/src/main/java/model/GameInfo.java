@@ -10,6 +10,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Alvin on 11/18/2017.
@@ -18,7 +20,7 @@ import java.io.Serializable;
 public class GameInfo implements Serializable {
     public String gameName;
     public Player player;
-    public Challenge challenge;
+    public List<Challenge> challenges =  new ArrayList<Challenge>();
 
     public GameInfo(){}
     public GameInfo(String gameName) {
@@ -28,12 +30,6 @@ public class GameInfo implements Serializable {
         this.gameName = gameName;
         this.player = player;
     }
-    public GameInfo(String gameName, Player player, Challenge challenge) {
-        this.gameName = gameName;
-        this.player = player;
-        this.challenge = challenge;
-    }
-
 
     public String getGameName() {
         return gameName;
@@ -51,12 +47,16 @@ public class GameInfo implements Serializable {
         this.player = player;
     }
 
-    public Challenge getChallenge() {
-        return challenge;
+    public List<Challenge> getChallenges() {
+        return challenges;
     }
 
-    public void setChallenge(Challenge challenge) {
-        this.challenge = challenge;
+    public void setChallenges(List<Challenge> challenges) {
+        this.challenges = challenges;
+    }
+
+    public void addChallenges(Challenge challenge){
+        this.challenges.add(challenge);
     }
 }
 

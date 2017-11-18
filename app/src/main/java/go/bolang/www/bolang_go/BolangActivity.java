@@ -289,7 +289,7 @@ public class BolangActivity extends AppCompatActivity
             challengeLocation.setLongitude(challenge.getPosition().getLongitude());
 
             Float distance = lastLocation.distanceTo(challengeLocation);
-            if(distance <= nearest){
+            if(distance <= nearest && challenge.isCleared() == false){
                 nearChallange = challenge;
                 nearest = distance;
             }
