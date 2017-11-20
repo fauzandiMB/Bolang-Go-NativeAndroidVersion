@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Bolang-Go-NativeAndroidVersion.iml" filepath="$PROJECT_DIR$/Bolang-Go-NativeAndroidVersion.iml" />
+      <module fileurl="file://E:\Project\Mobile\Bolang-Go-NativeAndroidVersion\BolangGo.iml" filepath="E:\Project\Mobile\Bolang-Go-NativeAndroidVersion\BolangGo.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

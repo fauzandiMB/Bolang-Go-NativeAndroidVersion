@@ -6,10 +6,13 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
@@ -21,6 +24,7 @@ import java.util.Random;
 
 import static android.R.attr.x;
 import static android.R.attr.y;
+import static android.icu.lang.UCharacter.GraphemeClusterBreak.T;
 
 public class ShakeActivity extends AppCompatActivity implements SensorEventListener {
     private SensorManager senSensorManager;
@@ -36,6 +40,8 @@ public class ShakeActivity extends AppCompatActivity implements SensorEventListe
     private DatabaseReference mDatabase;
     private DatabaseReference mTreasure;
 
+    private Button buttonMulai;
+    private boolean sudahMulai = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +51,7 @@ public class ShakeActivity extends AppCompatActivity implements SensorEventListe
         senSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         senAccelerometer = senSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         senSensorManager.registerListener(this, senAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
-
+        buttonMulai = (Button) findViewById(R.id.buttonMulaiShake);
         // Firebase Database
         mDatabase = FirebaseDatabase.getInstance().getReference("");
 
@@ -56,7 +62,7 @@ public class ShakeActivity extends AppCompatActivity implements SensorEventListe
     public void onSensorChanged(SensorEvent sensorEvent) {
         Sensor mySensor = sensorEvent.sensor;
 
-        if (mySensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+        if (mySensor.getType() == Sensor.TYPE_ACCELEROMETER && sudahMulai) {
             float x = sensorEvent.values[0];
             float y = sensorEvent.values[1];
             float z = sensorEvent.values[2];
@@ -141,11 +147,11 @@ public class ShakeActivity extends AppCompatActivity implements SensorEventListe
         TextView text = (TextView)findViewById(R.id.number_3);
         if(points<max_points) {
             points += poin;
-            text.setText("" + (int) points);
+            text.setText("" + (int) points +"/" + (int) max_points);
         }
         if(points>max_points){
             points = max_points;
-            text.setText("" + (int) points);
+            text.setText("" + (int) points +"/" + (int) max_points);
         }
     }
 
@@ -153,11 +159,11 @@ public class ShakeActivity extends AppCompatActivity implements SensorEventListe
         TextView text = (TextView)findViewById(R.id.number_3);
         if(points<max_points) {
             points += poin;
-            text.setText("" + (int) points);
+            text.setText("" + (int) points +"/" + (int) max_points);
         }
         if(points>max_points){
             points = max_points;
-            text.setText("" + (int) points);
+            text.setText("" + (int) points +"/" + (int) max_points);
         }
     }
 
@@ -165,11 +171,11 @@ public class ShakeActivity extends AppCompatActivity implements SensorEventListe
         TextView text = (TextView)findViewById(R.id.number_3);
         if(points<max_points) {
             points += poin;
-            text.setText("" + (int) points);
+            text.setText("" + (int) points +"/" + (int) max_points);
         }
         if(points>max_points){
             points = max_points;
-            text.setText("" + (int) points);
+            text.setText("" + (int) points +"/" + (int) max_points);
         }
     }
 
@@ -177,11 +183,36 @@ public class ShakeActivity extends AppCompatActivity implements SensorEventListe
         TextView text = (TextView)findViewById(R.id.number_3);
         if(points<max_points) {
             points += poin;
-            text.setText("" + (int) points);
+            text.setText("" + (int) points +"/" + (int) max_points);
         }
         if(points>max_points){
             points = max_points;
-            text.setText("" + (int) points);
+            text.setText("" + (int) points +"/" + (int) max_points);
         }
+    }
+
+        public void mulaiShake(View view) {
+            this.sudahMulai = true;
+//            buttonMulai.setEnabled(false);
+
+            View namebar = (View) findViewById(R.id.buttonMulaiShake);
+            ((ViewGroup) namebar.getParent()).removeView(namebar);
+
+            final TextView timerText = (TextView)findViewById(R.id.timer);
+
+//        start 1 minutes timer
+            new CountDownTimer(20000, 10) {
+
+                public void onTick(long millisUntilFinished) {
+                    timerText.setText((millisUntilFinished / 1000 < 10 ? ("0" + millisUntilFinished / 1000):(millisUntilFinished / 1000))  + ":" + ((millisUntilFinished % 1000 / 10) < 10 ? ("0" + millisUntilFinished % 1000 / 10):(millisUntilFinished % 1000 / 10))  );
+                }
+
+                public void onFinish() {
+                    sudahMulai = false;
+                    timerText.setTextSize(40);
+                    timerText.setText("Waktu Habis! Anda mendapatkan " + points + " koin");
+                }
+            }.start();
+
     }
 }

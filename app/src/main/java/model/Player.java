@@ -1,7 +1,5 @@
 package model;
 
-import com.google.android.gms.maps.model.LatLng;
-
 import java.io.Serializable;
 
 /**
@@ -10,65 +8,21 @@ import java.io.Serializable;
 
 public class Player implements Serializable {
     public String id;
-    public String namePlayer;
-    public LatLng position;
+    public String displayName;
+    public Position position;
     public Double indexChallenge;
     public Double collectedCoin;
     public Double answeredQuiz;
 
-    public Player(String id, String namePlayer, Double lat, Double lng, Double indexChallenge, Double collectedCoin, Double answeredQuiz) {
+    public Player(){}
+
+    public Player(String id, String displayName, Position position, Double indexChallenge, Double collectedCoin, Double answeredQuiz) {
         this.id = id;
-        this.namePlayer = namePlayer;
+        this.displayName = displayName;
+        this.position = position;
         this.indexChallenge = indexChallenge;
         this.collectedCoin = collectedCoin;
         this.answeredQuiz = answeredQuiz;
-        this.position = new LatLng(lat, lng);
-    }
-
-    public Player(String id, Double lat, Double lng) {
-        this.id = id;
-        this.namePlayer = "";
-        this.indexChallenge = 0.0;
-        this.collectedCoin = 0.0;
-        this.answeredQuiz = 0.0;
-        this.position = new LatLng(lat, lng);
-    }
-
-    public Player(String id) {
-        this.id = id;
-        this.namePlayer = "";
-        this.indexChallenge = 0.0;
-        this.collectedCoin = 0.0;
-        this.answeredQuiz = 0.0;
-        this.position = new LatLng(0,0);
-    }
-    public Player(String id, String namePlayer) {
-        this.id = id;
-        this.namePlayer = namePlayer;
-        this.indexChallenge = 0.0;
-        this.collectedCoin = 0.0;
-        this.answeredQuiz = 0.0;
-        this.position = new LatLng(0,0);
-    }
-
-    public Player() {}
-
-    public Player(String id, String namePlayer, LatLng pos, Double indexChallenge, Double collectedCoin, Double answeredQuiz){
-        this.id = id;
-        this.namePlayer = namePlayer;
-        this.indexChallenge = indexChallenge;
-        this.collectedCoin = collectedCoin;
-        this.answeredQuiz = answeredQuiz;
-        this.position = pos;
-    }
-
-    public Player(String id, String namePlayer, LatLng pos){
-        this.id = id;
-        this.namePlayer = namePlayer;
-        this.indexChallenge = 0.0;
-        this.collectedCoin = 0.0;
-        this.answeredQuiz = 0.0;
-        this.position = pos;
     }
 
     public String getId() {
@@ -79,30 +33,20 @@ public class Player implements Serializable {
         this.id = id;
     }
 
-    public Double getLat() {
-        return position.latitude;
+    public String getDisplayName() {
+        return displayName;
     }
 
-    public void setLat(Double lat) {
-        Double lng = this.position.longitude;
-        this.position = new LatLng(lat, lng);
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
     }
 
-    public Double getLng() {
-        return this.position.longitude;
+    public Position getPosition() {
+        return position;
     }
 
-    public void setLng(Double lng) {
-        Double lat = this.position.latitude;
-        this.position = new LatLng(lat, lng);
-    }
-
-    public void setPos(LatLng pos){
-        this.position = pos;
-    }
-
-    public LatLng getPos(){
-        return this.position;
+    public void setPosition(Position position) {
+        this.position = position;
     }
 
     public Double getIndexChallenge() {
@@ -121,12 +65,11 @@ public class Player implements Serializable {
         this.collectedCoin = collectedCoin;
     }
 
-    public Double getAnsweredQuiz() {return answeredQuiz;}
+    public Double getAnsweredQuiz() {
+        return answeredQuiz;
+    }
 
-    public void setAnsweredQuiz(Double answeredQuiz) { this.answeredQuiz = answeredQuiz;}
-
-    public String getNamePlayer() {return namePlayer;}
-
-    public void setNamePlayer(String namePlayer) { this.namePlayer = namePlayer;}
-
+    public void setAnsweredQuiz(Double answeredQuiz) {
+        this.answeredQuiz = answeredQuiz;
+    }
 }

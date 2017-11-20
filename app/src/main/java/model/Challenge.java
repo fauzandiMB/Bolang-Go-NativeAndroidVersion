@@ -1,5 +1,8 @@
 package model;
 
+import android.location.Location;
+import android.util.Log;
+
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.Serializable;
@@ -9,8 +12,8 @@ import java.io.Serializable;
  */
 
 public class Challenge implements Serializable {
-
-    public LatLng position;
+    public Double index;
+    public Position position;
     public String type;
     public boolean isCleared;
     public String typeQuiz;
@@ -18,42 +21,23 @@ public class Challenge implements Serializable {
     public Treasure treasure;
 
     public Challenge(){}
-    public Challenge(LatLng position, String type, String typeQuiz, boolean isCleared) {
+
+    public Challenge(Double index, Position position, String type, boolean isCleared, String typeQuiz, Quiz quiz, Treasure treasure) {
+        this.index = index;
         this.position = position;
         this.type = type;
         this.isCleared = isCleared;
         this.typeQuiz = typeQuiz;
+        this.quiz = quiz;
+        this.treasure = treasure;
     }
 
-    public Challenge(Double lat, Double lng, String type, String typeQuiz, boolean isCleared){
-        this.position = new LatLng(lat,lng);
-        this.type = type;
-        this.isCleared = isCleared;
-        this.typeQuiz = typeQuiz;
+    public Position getPosition() {
+        return position;
     }
 
-    public Challenge(LatLng pos, String type){
-        this.position = pos;
-        this.type = type;
-        this.isCleared = false;
-    }
-
-    public Double getLat() {
-        return this.position.latitude;
-    }
-
-    public void setLat(Double lat) {
-        Double lng = this.position.longitude;
-        this.position = new LatLng(lat, lng);
-    }
-
-    public Double getLng() {
-        return this.position.longitude;
-    }
-
-    public void setLng(Double lng) {
-        Double lat = this.position.latitude;
-        this.position = new LatLng(lat, lng);
+    public void setPosition(Position position) {
+        this.position = position;
     }
 
     public String getType() {
@@ -64,20 +48,48 @@ public class Challenge implements Serializable {
         this.type = type;
     }
 
-    public void setPosition(LatLng pos){
-        this.position = pos;
+    public boolean isCleared() {
+        return isCleared;
     }
 
-    public LatLng getPos(){
-        return this.position;
+    public void setCleared(boolean cleared) {
+        isCleared = cleared;
     }
 
-    public Object getChallenge(){
-        if(type == Constant.QUIZ_CHALLENGE){
-            return quiz;
-        }else{
-            return treasure;
-        }
+    public String getTypeQuiz() {
+        return typeQuiz;
     }
 
+    public void setTypeQuiz(String typeQuiz) {
+        this.typeQuiz = typeQuiz;
+    }
+
+    public Quiz getQuiz() {
+        return quiz;
+    }
+
+    public void setQuiz(Quiz quiz) {
+        this.quiz = quiz;
+    }
+
+    public Treasure getTreasure() {
+        return treasure;
+    }
+
+    public void setTreasure(Treasure treasure) {
+        this.treasure = treasure;
+    }
+
+    public Double getIndex() {return index;}
+
+    public void setIndex(Double index) {this.index = index;}
+
+    public Double getDistance(Location playerLocation){
+        Location location =  new Location("Challenge-Location");
+        location.setLatitude(position.latitude);
+        location.setLongitude(position.longitude);
+        Float distance = playerLocation.distanceTo(location);
+        Log.d(this.getClass().getName(), "Distance = " + distance + " with location = " + playerLocation.getLatitude() + ", " + playerLocation.getLongitude());
+        return Double.parseDouble(distance.toString());
+    }
 }

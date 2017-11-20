@@ -21,6 +21,7 @@ import java.io.Serializable;
 
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 import model.Constant;
+import model.DataManager;
 import model.GameInfo;
 
 public class GabungPermainanActivity  extends AppCompatActivity implements ZXingScannerView.ResultHandler {
@@ -66,29 +67,10 @@ public class GabungPermainanActivity  extends AppCompatActivity implements ZXing
         gameInfo = new GameInfo();
         gameInfo.setGameName(rawResult.getText());
 
-
-        try {
-            FileOutputStream fos = openFileOutput(Constant.FILENAME_GAME_INFO, Context.MODE_PRIVATE);
-                    //this.openFileOutput("GameInfo", Context.MODE_PRIVATE);
-            ObjectOutputStream os = new ObjectOutputStream(fos);
-            os.writeObject(gameInfo);
-            os.close();
-            fos.close();
-            Log.d(this.getClass().getName(), "gabung permainan success");
-            // pindah ke gabung permainan 2
+        if(DataManager.saveGameInfo(gameInfo,Constant.FILENAME_GAME_INFO, getApplicationContext())){
             this.toGabungPermainan(rawResult.getText());
-        } catch (IOException e) {
-            e.printStackTrace();
         }
 
-//        AlertDialog.Builder builder = new AlertDialog.Builder(this)6;
-//        builder.setTitle("Scan Result");
-//        builder.setMessage(rawResult.getText());
-//        AlertDialog alert1 = builder.create();
-//        alert1.show();
-
-        // If you would like to resume scanning, call this method below:
-//        mScannerView.resumeCameraPreview(this);
     }
 
     public void toGabungPermainan(String code) {
