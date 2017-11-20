@@ -13,6 +13,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -83,8 +84,10 @@ public class BolangActivity extends AppCompatActivity
         challenges = new ArrayList<Challenge>();
         challengesMarkers = new ArrayList<Marker>();
 
+        Bundle extras = getIntent().getExtras();
+
         // Firebase Database
-        mDatabase = FirebaseDatabase.getInstance().getReference("Game").child("TestGame");
+        mDatabase = FirebaseDatabase.getInstance().getReference("Game").child(extras.getString("code"));
 
         mChallenge = mDatabase.child("challenges");
 
