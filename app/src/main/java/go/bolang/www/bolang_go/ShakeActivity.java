@@ -5,6 +5,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.location.Location;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
@@ -16,17 +17,20 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import com.google.android.gms.location.LocationListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.Random;
 
+import model.Challenge;
+
 import static android.R.attr.x;
 import static android.R.attr.y;
 import static android.icu.lang.UCharacter.GraphemeClusterBreak.T;
 
-public class ShakeActivity extends AppCompatActivity implements SensorEventListener {
+public class ShakeActivity extends AppCompatActivity implements SensorEventListener, LocationListener {
     private SensorManager senSensorManager;
     private Sensor senAccelerometer;
 
@@ -42,6 +46,9 @@ public class ShakeActivity extends AppCompatActivity implements SensorEventListe
 
     private Button buttonMulai;
     private boolean sudahMulai = false;
+
+    private Challenge challenge;
+    private Location lastLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -214,5 +221,19 @@ public class ShakeActivity extends AppCompatActivity implements SensorEventListe
                 }
             }.start();
 
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        lastLocation = location;
+
+        if(challenge != null){
+            double radius = challenge.getDistance(location);
+
+            // TODO kalo radius lokasinya lebih dari yang ditentukan dia bakal keluar.
+            if(radius > 10){
+                finish();
+            }
+        }
     }
 }
