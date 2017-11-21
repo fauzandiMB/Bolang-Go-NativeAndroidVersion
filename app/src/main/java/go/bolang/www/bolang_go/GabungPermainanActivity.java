@@ -71,16 +71,6 @@ public class GabungPermainanActivity  extends AppCompatActivity implements ZXing
             this.toGabungPermainan(rawResult.getText());
         }
 
-
-
-//        AlertDialog.Builder builder = new AlertDialog.Builder(this)6;
-//        builder.setTitle("Scan Result");
-//        builder.setMessage(rawResult.getText());
-//        AlertDialog alert1 = builder.create();
-//        alert1.show();
-
-        // If you would like to resume scanning, call this method below:
-//        mScannerView.resumeCameraPreview(this);
     }
 
     public void toGabungPermainan(String code) {
