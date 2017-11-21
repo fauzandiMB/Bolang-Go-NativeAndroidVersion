@@ -281,7 +281,10 @@ public class BolangActivity extends AppCompatActivity
         mMap.animateCamera(CameraUpdateFactory.zoomBy(17));
 
         // set player position
-        player.setPosition(new Position(latlang.latitude, latlang.longitude));
+        Position pos = new Position(latlang.latitude, latlang.longitude);
+        player.setPosition(pos);
+        gameInfo.getPlayer().setPosition(pos);
+        DataManager.saveGameInfo(gameInfo, Constant.FILENAME_GAME_INFO, getApplicationContext());
 
         //Firebase Database update position player
         mDatabase.child(Constant.DB_PLAYERS).child(mAuth.getCurrentUser().getUid()).child(Constant.DB_LATITUDE).setValue(location.getLatitude());
