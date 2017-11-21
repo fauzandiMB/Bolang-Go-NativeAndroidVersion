@@ -1,10 +1,12 @@
 package go.bolang.www.bolang_go;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.Loader;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -67,6 +69,11 @@ public class BolangActivity extends AppCompatActivity
     private FirebaseAuth.AuthStateListener mAuthListener;
     private GameInfo gameInfo;
     private Double radius = 10.0;// radius 10 meters
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,7 +139,6 @@ public class BolangActivity extends AppCompatActivity
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-
     }
 
     @Override
@@ -161,12 +167,41 @@ public class BolangActivity extends AppCompatActivity
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 0);
+        } else {
+            mMap.setMyLocationEnabled(true);
+            Location location = getLastKnownLocation();
+            if (location != null) {
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 15));
+            }
+        }
 
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             buildClientApi();
             mMap.setMyLocationEnabled(true);
+            System.out.println("Liat last location nya null engga " + (lastLocation == null));
         }
 
+    }
+
+    private Location getLastKnownLocation() {
+        LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        List<String> providers = locationManager.getProviders(true);
+        Location bestLocation = null;
+        for (String provider : providers) {
+            try {
+                Location location = locationManager.getLastKnownLocation(provider);
+                if (location == null) {
+                    continue;
+                }
+                if (bestLocation == null || location.getAccuracy() < bestLocation.getAccuracy()) {
+                    bestLocation = location;
+                }
+            } catch (SecurityException ignored) {
+            }
+        }
+        return bestLocation;
     }
 
     public void addMarkerChallenge(){
@@ -243,8 +278,6 @@ public class BolangActivity extends AppCompatActivity
             LocationServices.FusedLocationApi.requestLocationUpdates(client, locationRequest, this);
         }
 
-        //add player to database server
-
 
     }
 
@@ -272,9 +305,7 @@ public class BolangActivity extends AppCompatActivity
 
     @Override
     public void onLocationChanged(Location location) {
-        Log.d(this.getClass().getName(), "Location has been changed");
         lastLocation = location;
-
         if(currentLocationMarker != null){
             currentLocationMarker.remove();
         }
