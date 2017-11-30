@@ -377,7 +377,8 @@ public class BolangActivity extends AppCompatActivity
 
         // nanti pake bundle extra aja....
         if(challenge.getType().equals(Constant.QUIZ_CHALLENGE)){
-            // dapetin quiz dari db dulu random yang penting tipe quiznya sama
+            Intent intent = new Intent(BolangActivity.this, QuizActivity.class);
+            startActivity(intent);
         }else if(challenge.getType().equals(Constant.TREASURE_CHALLENGE)){
             Intent intent = new Intent(BolangActivity.this, ShakeActivity.class);
             startActivity(intent);
