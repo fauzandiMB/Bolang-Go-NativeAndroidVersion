@@ -74,7 +74,7 @@ public class GabungPermainanActivity  extends AppCompatActivity implements ZXing
     }
 
     public void toGabungPermainan(String code) {
-        Intent intent = new Intent(GabungPermainanActivity.this, GabungPermainan2Activity.class);
+        Intent intent = new Intent(GabungPermainanActivity.this, BolangActivity.class);
         intent.putExtra("code", code);
         startActivity(intent);
     }

@@ -68,12 +68,7 @@ public class BolangActivity extends AppCompatActivity
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private GameInfo gameInfo;
-    private Double radius = 10.0;// radius 10 meters
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-    }
+    private Double radius = 20.0;// radius 10 meters
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,7 +105,6 @@ public class BolangActivity extends AppCompatActivity
                     gameInfo.setChallenges(challenges);
                     DataManager.saveGameInfo(gameInfo,Constant.FILENAME_GAME_INFO, getApplicationContext());
                     Log.d(this.getClass().getName(), "add " + gameInfo.getChallenges().size() +  " challenge");
-
                     checkNearestChallenge();
                 }
                 addMarkerChallenge();
@@ -368,6 +362,7 @@ public class BolangActivity extends AppCompatActivity
                 nearChallange = challenge;
                 nearest = distance;
             }
+            Log.d(getClass().getName(), "distance sekarang adalah "+ distance);
         }
         return  nearChallange;
     }
@@ -377,6 +372,9 @@ public class BolangActivity extends AppCompatActivity
 
         // nanti pake bundle extra aja....
         if(challenge.getType().equals(Constant.QUIZ_CHALLENGE)){
+//            Intent intent = new Intent(BolangActivity.this, QuizActivity.class);
+//            startActivity(intent);
+            Log.i(getClass().getName(),"masuk ke quiz");
             Intent intent = new Intent(BolangActivity.this, QuizActivity.class);
             startActivity(intent);
         }else if(challenge.getType().equals(Constant.TREASURE_CHALLENGE)){
