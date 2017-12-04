@@ -58,5 +58,10 @@ public class GameInfo implements Serializable {
     public void addChallenges(Challenge challenge){
         this.challenges.add(challenge);
     }
+
+    public Challenge getCurrentChallenge(){
+        if(this.challenges.isEmpty()) return null;
+        return this.challenges.get(this.player.getIndexChallenge().intValue());
+    }
 }
 

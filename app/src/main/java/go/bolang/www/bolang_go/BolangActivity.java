@@ -1,9 +1,10 @@
 package go.bolang.www.bolang_go;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.Loader;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
@@ -15,7 +16,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -63,7 +63,7 @@ public class BolangActivity extends AppCompatActivity
     private DatabaseReference mDatabase;
     private DatabaseReference mChallenge;
     private List<Challenge> challenges;
-    private Challenge nearestChallenge;
+    private Challenge currentChallenge;
     private Player player;
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
@@ -79,19 +79,58 @@ public class BolangActivity extends AppCompatActivity
         GameInfo gi = DataManager.loadGameInfo(Constant.FILENAME_GAME_INFO, this.getApplicationContext());
         if(gi != null){
             gameInfo = gi;
+        }else{
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage("Maaf terjadi kesahalan")
+                    .setCancelable(false)
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            //do things
+                            finish();
+                        }
+                    });
+            AlertDialog alert = builder.create();
+            alert.show();
         }
+
+        //save game name
+        final Bundle extras = getIntent().getExtras();
+        gameInfo.setGameName(extras.getString("code"));
+        DataManager.saveGameInfo(gameInfo, Constant.FILENAME_GAME_INFO, getApplicationContext());
 
         player = new Player();
 
         challenges = new ArrayList<Challenge>();
         challengesMarkers = new ArrayList<Marker>();
 
-        Bundle extras = getIntent().getExtras();
+
 
         // Firebase Database
-        mDatabase = FirebaseDatabase.getInstance().getReference("Game").child(extras.getString("code"));
+        DatabaseReference mRoot = FirebaseDatabase.getInstance().getReference("Game");
+        mRoot.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                GameInfo gi = DataManager.loadGameInfo(Constant.FILENAME_GAME_INFO, getApplicationContext());
 
+                if(!dataSnapshot.hasChild(gi.getGameName())){
+                    finish();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        mDatabase = mRoot.child(gi.getGameName());
         mChallenge = mDatabase.child("challenges");
+
+        // Firebase Auth
+        mAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
+        if(user != null) addPlayer(user.getUid(), user.getDisplayName());
+
 
         mChallenge.addValueEventListener(new ValueEventListener() {
             @Override
@@ -105,7 +144,10 @@ public class BolangActivity extends AppCompatActivity
                     gameInfo.setChallenges(challenges);
                     DataManager.saveGameInfo(gameInfo,Constant.FILENAME_GAME_INFO, getApplicationContext());
                     Log.d(this.getClass().getName(), "add " + gameInfo.getChallenges().size() +  " challenge");
-                    checkNearestChallenge();
+                    checkCurrentChallenge();
+                }
+                if(challenges.isEmpty()){
+                    ErrorDialogue("Maaf Game Room tidak tersedia");
                 }
                 addMarkerChallenge();
             }
@@ -116,10 +158,7 @@ public class BolangActivity extends AppCompatActivity
             }
         });
 
-        // Firebase Auth
-        mAuth = FirebaseAuth.getInstance();
-        FirebaseUser user = mAuth.getCurrentUser();
-        if(user != null) addPlayer(user.getUid(), user.getDisplayName());
+
 
 
         //check permission
@@ -133,6 +172,20 @@ public class BolangActivity extends AppCompatActivity
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
+    }
+
+    public void ErrorDialogue(String msg){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(msg)
+                .setCancelable(false)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        //do things
+                        finish();
+                    }
+                });
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 
     @Override
@@ -200,6 +253,7 @@ public class BolangActivity extends AppCompatActivity
 
     public void addMarkerChallenge(){
         challengesMarkers.clear();
+        int index = gameInfo.getPlayer().getIndexChallenge().intValue();
         for(int i = 0; i < challenges.size(); i++){
             Challenge challenge = challenges.get(i);
             MarkerOptions markerOptions = new MarkerOptions();
@@ -234,10 +288,17 @@ public class BolangActivity extends AppCompatActivity
                     markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET));
                     break;
             }
-            challengesMarkers.add(mMap.addMarker(markerOptions));
+            if(gameInfo.getPlayer() == null){
+                Log.d(getClass().getName(), "player null");
+            }else {
+                Log.d(getClass().getName(), "player not null ");
+            }
+            if(index == i)
+                challengesMarkers.add(mMap.addMarker(markerOptions));
         }
-        mMap.setOnMarkerClickListener(this);
-
+        if(mMap != null){
+            mMap.setOnMarkerClickListener(this);
+        }
     }
 
     protected synchronized void buildClientApi() {
@@ -256,6 +317,7 @@ public class BolangActivity extends AppCompatActivity
         mDatabase.child(Constant.DB_PLAYERS).child(id).setValue(player);
         if(gameInfo.getPlayer() == null){
             gameInfo.setPlayer(player);
+            gameInfo.getPlayer().setIndexChallenge(0.0);
             DataManager.saveGameInfo(gameInfo, Constant.FILENAME_GAME_INFO, this.getApplicationContext());
         }
     }
@@ -318,7 +380,7 @@ public class BolangActivity extends AppCompatActivity
         mDatabase.child(Constant.DB_PLAYERS).child(mAuth.getCurrentUser().getUid()).child(Constant.DB_LATITUDE).setValue(location.getLatitude());
         mDatabase.child(Constant.DB_PLAYERS).child(mAuth.getCurrentUser().getUid()).child(Constant.DB_LONGITUDE).setValue(location.getLongitude());
 
-        checkNearestChallenge();
+        checkCurrentChallenge();
 
         if(client != null){
             LocationServices.FusedLocationApi.removeLocationUpdates(client, this);
@@ -331,17 +393,14 @@ public class BolangActivity extends AppCompatActivity
         return false;
     }
 
-    public void checkNearestChallenge(){
-        nearestChallenge = getNearestChallenge();
-        //Log.d(this.getClass().getName(), "Nearnest challenge is null? " + (nearestChallenge == null));
+    public void checkCurrentChallenge(){
+        currentChallenge = gameInfo.getCurrentChallenge();
         // Debug nearest challange and get distance to player
-        if(nearestChallenge != null){
-            Log.d(this.getClass().getName(), "Nearnest challenge is " + nearestChallenge.getType()  + " distance = " + nearestChallenge.getDistance(lastLocation));
-
+        if(currentChallenge != null){
             // Check if distance uncleared challenge less then radius
-            if(nearestChallenge.getDistance(lastLocation) <= radius){
+            if(currentChallenge.getDistance(lastLocation) <= radius){
                 Log.d(this.getClass().getName(), "open challenge");
-                openChallenge(nearestChallenge);
+                openChallenge(currentChallenge);
             }
         }
     }
