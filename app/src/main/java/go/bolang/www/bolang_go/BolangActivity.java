@@ -189,6 +189,12 @@ public class BolangActivity extends AppCompatActivity
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        gameInfo = DataManager.loadGameInfo(Constant.FILENAME_GAME_INFO,getApplicationContext());
+    }
+
+    @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
 
         switch (requestCode){

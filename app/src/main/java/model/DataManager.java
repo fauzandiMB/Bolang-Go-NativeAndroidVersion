@@ -15,6 +15,8 @@ import java.io.ObjectOutputStream;
  */
 
 public final class DataManager {
+    static GameInfo m_gameInfo = null;
+
     public static boolean saveGameInfo(GameInfo gameInfo, String filename, Context context){
         try {
             FileOutputStream fos = context.openFileOutput(filename, Context.MODE_PRIVATE);
@@ -46,6 +48,7 @@ public final class DataManager {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
+        m_gameInfo = gameInfo;
         return gameInfo;
     }
 
@@ -58,4 +61,5 @@ public final class DataManager {
         }
         return false;
     }
+
 }
