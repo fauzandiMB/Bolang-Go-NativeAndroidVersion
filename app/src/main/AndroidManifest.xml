@@ -66,6 +66,7 @@
             android:screenOrientation="portrait" />
         <activity android:name=".GabungPermainan2Activity" />
         <activity android:name=".BuatPermainan3Activity"></activity>
+        <activity android:name=".QuizActivity"></activity>
     </application>
 
 </manifest>

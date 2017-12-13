@@ -1,10 +1,13 @@
 package go.bolang.www.bolang_go;
 
 import android.Manifest;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.Loader;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -13,7 +16,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -61,12 +63,12 @@ public class BolangActivity extends AppCompatActivity
     private DatabaseReference mDatabase;
     private DatabaseReference mChallenge;
     private List<Challenge> challenges;
-    private Challenge nearestChallenge;
+    private Challenge currentChallenge;
     private Player player;
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private GameInfo gameInfo;
-    private Double radius = 10.0;// radius 10 meters
+    private Double radius = 20.0;// radius 10 meters
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,19 +79,58 @@ public class BolangActivity extends AppCompatActivity
         GameInfo gi = DataManager.loadGameInfo(Constant.FILENAME_GAME_INFO, this.getApplicationContext());
         if(gi != null){
             gameInfo = gi;
+        }else{
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage("Maaf terjadi kesahalan")
+                    .setCancelable(false)
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            //do things
+                            finish();
+                        }
+                    });
+            AlertDialog alert = builder.create();
+            alert.show();
         }
+
+        //save game name
+        final Bundle extras = getIntent().getExtras();
+        gameInfo.setGameName(extras.getString("code"));
+        DataManager.saveGameInfo(gameInfo, Constant.FILENAME_GAME_INFO, getApplicationContext());
 
         player = new Player();
 
         challenges = new ArrayList<Challenge>();
         challengesMarkers = new ArrayList<Marker>();
 
-        Bundle extras = getIntent().getExtras();
+
 
         // Firebase Database
-        mDatabase = FirebaseDatabase.getInstance().getReference("Game").child(extras.getString("code"));
+        DatabaseReference mRoot = FirebaseDatabase.getInstance().getReference("Game");
+        mRoot.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                GameInfo gi = DataManager.loadGameInfo(Constant.FILENAME_GAME_INFO, getApplicationContext());
 
+                if(!dataSnapshot.hasChild(gi.getGameName())){
+                    finish();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        mDatabase = mRoot.child(gi.getGameName());
         mChallenge = mDatabase.child("challenges");
+
+        // Firebase Auth
+        mAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
+        if(user != null) addPlayer(user.getUid(), user.getDisplayName());
+
 
         mChallenge.addValueEventListener(new ValueEventListener() {
             @Override
@@ -103,8 +144,10 @@ public class BolangActivity extends AppCompatActivity
                     gameInfo.setChallenges(challenges);
                     DataManager.saveGameInfo(gameInfo,Constant.FILENAME_GAME_INFO, getApplicationContext());
                     Log.d(this.getClass().getName(), "add " + gameInfo.getChallenges().size() +  " challenge");
-
-                    checkNearestChallenge();
+                    checkCurrentChallenge();
+                }
+                if(challenges.isEmpty()){
+                    ErrorDialogue("Maaf Game Room tidak tersedia");
                 }
                 addMarkerChallenge();
             }
@@ -115,10 +158,7 @@ public class BolangActivity extends AppCompatActivity
             }
         });
 
-        // Firebase Auth
-        mAuth = FirebaseAuth.getInstance();
-        FirebaseUser user = mAuth.getCurrentUser();
-        if(user != null) addPlayer(user.getUid(), user.getDisplayName());
+
 
 
         //check permission
@@ -132,7 +172,26 @@ public class BolangActivity extends AppCompatActivity
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
+    }
 
+    public void ErrorDialogue(String msg){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(msg)
+                .setCancelable(false)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        //do things
+                        finish();
+                    }
+                });
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        gameInfo = DataManager.loadGameInfo(Constant.FILENAME_GAME_INFO,getApplicationContext());
     }
 
     @Override
@@ -161,16 +220,46 @@ public class BolangActivity extends AppCompatActivity
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 0);
+        } else {
+            mMap.setMyLocationEnabled(true);
+            Location location = getLastKnownLocation();
+            if (location != null) {
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 15));
+            }
+        }
 
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             buildClientApi();
             mMap.setMyLocationEnabled(true);
+            System.out.println("Liat last location nya null engga " + (lastLocation == null));
         }
 
     }
 
+    private Location getLastKnownLocation() {
+        LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        List<String> providers = locationManager.getProviders(true);
+        Location bestLocation = null;
+        for (String provider : providers) {
+            try {
+                Location location = locationManager.getLastKnownLocation(provider);
+                if (location == null) {
+                    continue;
+                }
+                if (bestLocation == null || location.getAccuracy() < bestLocation.getAccuracy()) {
+                    bestLocation = location;
+                }
+            } catch (SecurityException ignored) {
+            }
+        }
+        return bestLocation;
+    }
+
     public void addMarkerChallenge(){
         challengesMarkers.clear();
+        int index = gameInfo.getPlayer().getIndexChallenge().intValue();
         for(int i = 0; i < challenges.size(); i++){
             Challenge challenge = challenges.get(i);
             MarkerOptions markerOptions = new MarkerOptions();
@@ -205,10 +294,17 @@ public class BolangActivity extends AppCompatActivity
                     markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET));
                     break;
             }
-            challengesMarkers.add(mMap.addMarker(markerOptions));
+            if(gameInfo.getPlayer() == null){
+                Log.d(getClass().getName(), "player null");
+            }else {
+                Log.d(getClass().getName(), "player not null ");
+            }
+            if(index == i)
+                challengesMarkers.add(mMap.addMarker(markerOptions));
         }
-        mMap.setOnMarkerClickListener(this);
-
+        if(mMap != null){
+            mMap.setOnMarkerClickListener(this);
+        }
     }
 
     protected synchronized void buildClientApi() {
@@ -227,6 +323,7 @@ public class BolangActivity extends AppCompatActivity
         mDatabase.child(Constant.DB_PLAYERS).child(id).setValue(player);
         if(gameInfo.getPlayer() == null){
             gameInfo.setPlayer(player);
+            gameInfo.getPlayer().setIndexChallenge(0.0);
             DataManager.saveGameInfo(gameInfo, Constant.FILENAME_GAME_INFO, this.getApplicationContext());
         }
     }
@@ -242,8 +339,6 @@ public class BolangActivity extends AppCompatActivity
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             LocationServices.FusedLocationApi.requestLocationUpdates(client, locationRequest, this);
         }
-
-        //add player to database server
 
 
     }
@@ -272,9 +367,7 @@ public class BolangActivity extends AppCompatActivity
 
     @Override
     public void onLocationChanged(Location location) {
-        Log.d(this.getClass().getName(), "Location has been changed");
         lastLocation = location;
-
         if(currentLocationMarker != null){
             currentLocationMarker.remove();
         }
@@ -284,13 +377,16 @@ public class BolangActivity extends AppCompatActivity
         mMap.animateCamera(CameraUpdateFactory.zoomBy(17));
 
         // set player position
-        player.setPosition(new Position(latlang.latitude, latlang.longitude));
+        Position pos = new Position(latlang.latitude, latlang.longitude);
+        player.setPosition(pos);
+        gameInfo.getPlayer().setPosition(pos);
+        DataManager.saveGameInfo(gameInfo, Constant.FILENAME_GAME_INFO, getApplicationContext());
 
         //Firebase Database update position player
         mDatabase.child(Constant.DB_PLAYERS).child(mAuth.getCurrentUser().getUid()).child(Constant.DB_LATITUDE).setValue(location.getLatitude());
         mDatabase.child(Constant.DB_PLAYERS).child(mAuth.getCurrentUser().getUid()).child(Constant.DB_LONGITUDE).setValue(location.getLongitude());
 
-        checkNearestChallenge();
+        checkCurrentChallenge();
 
         if(client != null){
             LocationServices.FusedLocationApi.removeLocationUpdates(client, this);
@@ -303,17 +399,14 @@ public class BolangActivity extends AppCompatActivity
         return false;
     }
 
-    public void checkNearestChallenge(){
-        nearestChallenge = getNearestChallenge();
-        //Log.d(this.getClass().getName(), "Nearnest challenge is null? " + (nearestChallenge == null));
+    public void checkCurrentChallenge(){
+        currentChallenge = gameInfo.getCurrentChallenge();
         // Debug nearest challange and get distance to player
-        if(nearestChallenge != null){
-            Log.d(this.getClass().getName(), "Nearnest challenge is " + nearestChallenge.getType()  + " distance = " + nearestChallenge.getDistance(lastLocation));
-
+        if(currentChallenge != null){
             // Check if distance uncleared challenge less then radius
-            if(nearestChallenge.getDistance(lastLocation) <= radius){
+            if(currentChallenge.getDistance(lastLocation) <= radius){
                 Log.d(this.getClass().getName(), "open challenge");
-                openChallenge(nearestChallenge);
+                openChallenge(currentChallenge);
             }
         }
     }
@@ -334,6 +427,7 @@ public class BolangActivity extends AppCompatActivity
                 nearChallange = challenge;
                 nearest = distance;
             }
+            Log.d(getClass().getName(), "distance sekarang adalah "+ distance);
         }
         return  nearChallange;
     }
@@ -343,7 +437,18 @@ public class BolangActivity extends AppCompatActivity
 
         // nanti pake bundle extra aja....
         if(challenge.getType().equals(Constant.QUIZ_CHALLENGE)){
-            // dapetin quiz dari db dulu random yang penting tipe quiznya sama
+//            Intent intent = new Intent(BolangActivity.this, QuizActivity.class);
+//            startActivity(intent);
+            Log.i(getClass().getName(),"masuk ke quiz");
+
+            if(challenge.getTypeQuiz().equals(Constant.QUIZ_SCIENCE)) {
+                Intent intent = new Intent(BolangActivity.this, Quiz2Activity.class);
+                startActivity(intent);
+            }
+            else if(challenge.getTypeQuiz().equals(Constant.QUIZ_SOCIAL)) {
+                Intent intent = new Intent(BolangActivity.this, QuizActivity.class);
+                startActivity(intent);
+            }
         }else if(challenge.getType().equals(Constant.TREASURE_CHALLENGE)){
             Intent intent = new Intent(BolangActivity.this, ShakeActivity.class);
             startActivity(intent);

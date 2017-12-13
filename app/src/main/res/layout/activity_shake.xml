@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
+    android:layout_height="fill_parent"
+    android:background="@drawable/background_admin">
     <LinearLayout
         android:layout_height="wrap_content"
         android:layout_width="fill_parent"
@@ -27,25 +28,22 @@
                 android:text="Poin Didapatkan:"
                 android:layout_width="383dp"
                 android:layout_height="fill_parent"/>
-
-
         </FrameLayout>
 
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/timer"
+        android:layout_width="match_parent"
+        android:layout_height="90dp"
+        android:textSize="40dp"
+        android:textAlignment="center"/>
 
     <Button
         android:id="@+id/buttonMulaiShake"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:height="50dp"
         android:text="Mulai"
         android:onClick="mulaiShake"/>
-
-    <TextView
-        android:id="@+id/timer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="50dp"
-        android:textAlignment="center"/>
-
-
 </LinearLayout>

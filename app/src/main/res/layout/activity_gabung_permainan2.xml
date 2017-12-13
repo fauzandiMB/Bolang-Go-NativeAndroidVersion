@@ -79,16 +79,16 @@
                 android:inputType="textPersonName"
                 android:background="#eeeeee"/>
 
-        <Button
-            android:id="@+id/btn_next"
-            android:layout_alignParentBottom="true"
-            android:layout_centerInParent="true"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:background="#eeeeee"
-            android:text="Bergabung"
-            android:onClick="toMap"
-            android:height="125dp" />
-    </RelativeLayout>
+            <Button
+                android:id="@+id/btn_next"
+                android:layout_alignParentBottom="true"
+                android:layout_centerInParent="true"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="#eeeeee"
+                android:text="Bergabung"
+                android:onClick="toMap"
+                android:height="125dp" />
+        </RelativeLayout>
     </RelativeLayout>
 </android.support.constraint.ConstraintLayout>
