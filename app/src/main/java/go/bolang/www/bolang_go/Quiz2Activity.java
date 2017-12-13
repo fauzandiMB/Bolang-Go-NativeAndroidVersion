@@ -10,12 +10,12 @@ import android.view.View;
 import android.util.Log;
 import android.widget.Toast;
 
-public class QuizActivity extends AppCompatActivity {
+public class Quiz2Activity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_quiz);
+        setContentView(R.layout.activity_quiz2);
     }
 
     public void choose_answer(View view) {

@@ -440,8 +440,15 @@ public class BolangActivity extends AppCompatActivity
 //            Intent intent = new Intent(BolangActivity.this, QuizActivity.class);
 //            startActivity(intent);
             Log.i(getClass().getName(),"masuk ke quiz");
-            Intent intent = new Intent(BolangActivity.this, QuizActivity.class);
-            startActivity(intent);
+
+            if(challenge.getTypeQuiz().equals(Constant.QUIZ_SCIENCE)) {
+                Intent intent = new Intent(BolangActivity.this, Quiz2Activity.class);
+                startActivity(intent);
+            }
+            else if(challenge.getTypeQuiz().equals(Constant.QUIZ_SOCIAL)) {
+                Intent intent = new Intent(BolangActivity.this, QuizActivity.class);
+                startActivity(intent);
+            }
         }else if(challenge.getType().equals(Constant.TREASURE_CHALLENGE)){
             Intent intent = new Intent(BolangActivity.this, ShakeActivity.class);
             startActivity(intent);

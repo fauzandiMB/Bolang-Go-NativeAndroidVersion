@@ -1,6 +1,8 @@
 package go.bolang.www.bolang_go;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -198,6 +200,8 @@ public class ShakeActivity extends AppCompatActivity implements SensorEventListe
         }
     }
 
+    AppCompatActivity aca = this;
+
         public void mulaiShake(View view) {
             this.sudahMulai = true;
 //            buttonMulai.setEnabled(false);
@@ -207,7 +211,7 @@ public class ShakeActivity extends AppCompatActivity implements SensorEventListe
 
             final TextView timerText = (TextView)findViewById(R.id.timer);
 
-//        start 1 minutes timer
+            // start 1 minutes timer
             new CountDownTimer(20000, 10) {
 
                 public void onTick(long millisUntilFinished) {
@@ -216,8 +220,20 @@ public class ShakeActivity extends AppCompatActivity implements SensorEventListe
 
                 public void onFinish() {
                     sudahMulai = false;
-                    timerText.setTextSize(40);
-                    timerText.setText("Waktu Habis! Anda mendapatkan " + points + " koin");
+//                    timerText.setTextSize(40);
+//                    timerText.setText("Waktu Habis! Anda mendapatkan " + points + " koin");
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(aca);
+                    builder.setMessage("Waktu Habis! Anda mendapatkan " + points + " koin")
+                            .setCancelable(false)
+                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    //do things
+                                    finish();
+                                }
+                            });
+                    AlertDialog alert = builder.create();
+                    alert.show();
                 }
             }.start();
 
