@@ -43,8 +43,7 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar"></activity>
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
@@ -54,7 +53,7 @@
         <activity android:name=".GabungPermainanActivity" />
         <activity android:name=".BolangActivity" />
         <activity android:name=".BuatPermainan2Activity" />
-        <activity android:name=".GLoginActivity" >
+        <activity android:name=".GLoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -65,8 +64,9 @@
             android:name=".ShakeActivity"
             android:screenOrientation="portrait" />
         <activity android:name=".GabungPermainan2Activity" />
-        <activity android:name=".BuatPermainan3Activity"></activity>
-        <activity android:name=".QuizActivity"></activity>
+        <activity android:name=".BuatPermainan3Activity" />
+        <activity android:name=".QuizActivity" />
+        <activity android:name=".Quiz2Activity"></activity>
     </application>
 
 </manifest>
