@@ -1,6 +1,8 @@
 package go.bolang.www.bolang_go;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -207,6 +209,7 @@ public class ShakeActivity extends AppCompatActivity implements SensorEventListe
 
             final TextView timerText = (TextView)findViewById(R.id.timer);
 
+            final ShakeActivity a = this;
 //        start 1 minutes timer
             new CountDownTimer(20000, 10) {
 
@@ -217,7 +220,18 @@ public class ShakeActivity extends AppCompatActivity implements SensorEventListe
                 public void onFinish() {
                     sudahMulai = false;
                     timerText.setTextSize(40);
-                    timerText.setText("Waktu Habis! Anda mendapatkan " + points + " koin");
+                    timerText.setText("Waktu Habis!");
+                    AlertDialog.Builder builder = new AlertDialog.Builder(a);
+                    builder.setMessage("Selamat, Anda mendapatkan " + points + " koin")
+                            .setCancelable(false)
+                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    //do things
+                                    finish();
+                                }
+                            });
+                    AlertDialog alert = builder.create();
+                    alert.show();
                 }
             }.start();
 
