@@ -93,6 +93,11 @@ public class BolangActivity extends AppCompatActivity
             alert.show();
         }
 
+        //Check it's cleared game
+        if(gameInfo.isCleared()){
+            finishGame();
+        }
+
         //save game name
         final Bundle extras = getIntent().getExtras();
         gameInfo.setGameName(extras.getString("code"));
@@ -192,6 +197,17 @@ public class BolangActivity extends AppCompatActivity
     protected void onResume() {
         super.onResume();
         gameInfo = DataManager.loadGameInfo(Constant.FILENAME_GAME_INFO,getApplicationContext());
+
+        //check cleared game
+        if(challenges.isEmpty()){
+            if(challenges.size() <= gameInfo.getPlayer().getIndexChallenge()){
+                gameInfo.setCleared(true);
+            }
+        }
+
+        if(gameInfo.isCleared()){
+            finishGame();
+        }
     }
 
     @Override
@@ -372,6 +388,10 @@ public class BolangActivity extends AppCompatActivity
             currentLocationMarker.remove();
         }
 
+        if(gameInfo != null && gameInfo.isCleared()){
+            finishGame();
+        }
+
         LatLng latlang = new LatLng(location.getLatitude(), location.getLongitude());
         mMap.moveCamera(CameraUpdateFactory.newLatLng(latlang));
         mMap.animateCamera(CameraUpdateFactory.zoomBy(17));
@@ -453,5 +473,10 @@ public class BolangActivity extends AppCompatActivity
             Intent intent = new Intent(BolangActivity.this, ShakeActivity.class);
             startActivity(intent);
         }
+    }
+
+    public void finishGame(){
+        Intent intent = new Intent(BolangActivity.this, ResultActivity.class);
+        startActivity(intent);
     }
 }

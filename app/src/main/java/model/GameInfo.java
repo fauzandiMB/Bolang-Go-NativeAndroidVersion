@@ -21,6 +21,7 @@ public class GameInfo implements Serializable {
     public String gameName;
     public Player player;
     public List<Challenge> challenges =  new ArrayList<Challenge>();
+    public boolean cleared = false;
 
     public GameInfo(){}
     public GameInfo(String gameName) {
@@ -58,6 +59,10 @@ public class GameInfo implements Serializable {
     public void addChallenges(Challenge challenge){
         this.challenges.add(challenge);
     }
+
+    public boolean isCleared() { return cleared;}
+
+    public void setCleared(boolean cleared) { this.cleared = cleared;}
 
     public Challenge getCurrentChallenge(){
         if(this.challenges.isEmpty()) return null;
