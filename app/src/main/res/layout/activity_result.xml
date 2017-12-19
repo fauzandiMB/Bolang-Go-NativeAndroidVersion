@@ -95,6 +95,7 @@
                         android:layout_width="500dp"
                         android:layout_height="wrap_content"
                         android:text="Kembali"
+                        android:onClick="kembali"
                         android:layout_marginRight="5dp"/>
                 </TableRow>
             </TableLayout>

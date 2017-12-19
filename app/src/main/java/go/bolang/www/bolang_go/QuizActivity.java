@@ -10,22 +10,29 @@ import android.view.View;
 import android.util.Log;
 import android.widget.Toast;
 
-public class QuizActivity extends AppCompatActivity {
+import model.Constant;
+import model.DataManager;
+import model.GameInfo;
 
+public class QuizActivity extends AppCompatActivity {
+    private GameInfo gi;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        gi = DataManager.loadGameInfo(Constant.FILENAME_GAME_INFO, getApplicationContext());
         setContentView(R.layout.activity_quiz);
     }
 
     public void choose_answer(View view) {
+        gi.getCurrentChallenge().setCleared(true);
+        gi.getPlayer().setIndexChallenge(gi.getPlayer().getIndexChallenge() + 1);
+        DataManager.saveGameInfo(gi, Constant.FILENAME_GAME_INFO, getApplicationContext());
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("Selamat, Jawaban Anda Benar!")
                 .setCancelable(false)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         //do things
-
                         finish();
                     }
                 });

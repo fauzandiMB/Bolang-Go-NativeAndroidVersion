@@ -69,10 +69,13 @@ public class BolangActivity extends AppCompatActivity
     private FirebaseAuth.AuthStateListener mAuthListener;
     private GameInfo gameInfo;
     private Double radius = 20.0;// radius 10 meters
+    private LocationManager locationManager;
+    private boolean sedangChallange = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        sedangChallange = false;
         setContentView(R.layout.activity_bolang);
 
         // set game info
@@ -197,7 +200,10 @@ public class BolangActivity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
+
+        sedangChallange = false;
         gameInfo = DataManager.loadGameInfo(Constant.FILENAME_GAME_INFO,getApplicationContext());
+        addMarkerChallenge();
 
         //check cleared game
         if(!challenges.isEmpty()){
@@ -256,7 +262,7 @@ public class BolangActivity extends AppCompatActivity
     }
 
     private Location getLastKnownLocation() {
-        LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         List<String> providers = locationManager.getProviders(true);
         Location bestLocation = null;
         for (String provider : providers) {
@@ -275,42 +281,54 @@ public class BolangActivity extends AppCompatActivity
     }
 
     public void addMarkerChallenge(){
+        for(Marker m: challengesMarkers) {
+            m.remove();
+        }
+
         challengesMarkers.clear();
         int index = gameInfo.getPlayer().getIndexChallenge().intValue();
+        Log.d("debug index", index + "");
         for(int i = 0; i < challenges.size(); i++){
             Challenge challenge = challenges.get(i);
             MarkerOptions markerOptions = new MarkerOptions();
             markerOptions.position(new LatLng(challenge.getPosition().latitude, challenge.getPosition().longitude));
             markerOptions.title(challenge.getType());
-            switch (i){
-                case 0:
-                    markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
-                    break;
-                case 1:
-                    markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
-                    break;
-                case 2:
-                    markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN));
-                    break;
-                case 3:
-                    markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
-                    break;
-                case 4:
-                    markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
-                    break;
-                case 5:
-                    markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE));
-                    break;
-                case 6:
-                    markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
-                    break;
-                case 7:
-                    markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ROSE));
-                    break;
-                default:
-                    markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET));
-                    break;
+
+            if(challenge.isCleared) {
+                markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
             }
+            else {
+                markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+            }
+//            switch (i){
+//                case 0:
+//                    markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
+//                    break;
+//                case 1:
+//                    markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
+//                    break;
+//                case 2:
+//                    markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN));
+//                    break;
+//                case 3:
+//                    markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+//                    break;
+//                case 4:
+//                    markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
+//                    break;
+//                case 5:
+//                    markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE));
+//                    break;
+//                case 6:
+//                    markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+//                    break;
+//                case 7:
+//                    markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ROSE));
+//                    break;
+//                default:
+//                    markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET));
+//                    break;
+//            }
             if(gameInfo.getPlayer() == null){
                 Log.d(getClass().getName(), "player null");
             }else {
@@ -384,6 +402,7 @@ public class BolangActivity extends AppCompatActivity
 
     @Override
     public void onLocationChanged(Location location) {
+        Log.d("debug ah", "claclacla locationChanged bray");
         lastLocation = location;
         if(currentLocationMarker != null){
             currentLocationMarker.remove();
@@ -394,14 +413,18 @@ public class BolangActivity extends AppCompatActivity
         }
 
         LatLng latlang = new LatLng(location.getLatitude(), location.getLongitude());
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(latlang));
-        mMap.animateCamera(CameraUpdateFactory.zoomBy(17));
-
+//        mMap.moveCamera(CameraUpdateFactory.newLatLng(latlang));
+//        mMap.animateCamera(CameraUpdateFactory.zoomBy(1));
+            mMap.setMaxZoomPreference(20);
+        mMap.setMinZoomPreference(15);
         // set player position
         Position pos = new Position(latlang.latitude, latlang.longitude);
         player.setPosition(pos);
         gameInfo.getPlayer().setPosition(pos);
-        DataManager.saveGameInfo(gameInfo, Constant.FILENAME_GAME_INFO, getApplicationContext());
+
+        if(!sedangChallange) {
+            DataManager.saveGameInfo(gameInfo, Constant.FILENAME_GAME_INFO, getApplicationContext());
+        }
 
         //Firebase Database update position player
         mDatabase.child(Constant.DB_PLAYERS).child(mAuth.getCurrentUser().getUid()).child(Constant.DB_LATITUDE).setValue(location.getLatitude());
@@ -409,9 +432,9 @@ public class BolangActivity extends AppCompatActivity
 
         checkCurrentChallenge();
 
-        if(client != null){
-            LocationServices.FusedLocationApi.removeLocationUpdates(client, this);
-        }
+//        if(client != null){
+//            LocationServices.FusedLocationApi.removeLocationUpdates(client, this);
+//        }
 
     }
 
@@ -431,7 +454,7 @@ public class BolangActivity extends AppCompatActivity
 
         if(currentChallenge != null){
             // Check if distance uncleared challenge less then radius
-            Log.d("DEBUG COY", "blablabla masuk currentChallange " + currentChallenge);
+            Log.d("DEBUG COY", "blablabla masuk currentChallange distance" + currentChallenge.getDistance(lastLocation));
             if(currentChallenge.getDistance(lastLocation) <= radius){
                 Log.d("DEBUG COY", "blablabla radius masuk " + radius);
                 Log.d(this.getClass().getName(), "open challenge");
@@ -462,29 +485,33 @@ public class BolangActivity extends AppCompatActivity
     }
 
     public void openChallenge(Challenge challenge){
-        Log.d(this.getClass().getName(), "challenge tipe " + challenge.getType());
 
-        // nanti pake bundle extra aja....
-        if(challenge.getType().equals(Constant.QUIZ_CHALLENGE)){
+        if(!sedangChallange) {
+            sedangChallange = true;
+            Log.d(this.getClass().getName(), "challenge tipe " + challenge.getType());
+
+            // nanti pake bundle extra aja....
+            if (challenge.getType().equals(Constant.QUIZ_CHALLENGE)) {
 //            Intent intent = new Intent(BolangActivity.this, QuizActivity.class);
 //            startActivity(intent);
-            Log.i(getClass().getName(),"masuk ke quiz");
+                Log.i(getClass().getName(), "masuk ke quiz");
 
-            if(challenge.getTypeQuiz().equals(Constant.QUIZ_SCIENCE)) {
-                Intent intent = new Intent(BolangActivity.this, Quiz2Activity.class);
+                if (challenge.getTypeQuiz().equals(Constant.QUIZ_SCIENCE)) {
+                    Intent intent = new Intent(BolangActivity.this, Quiz2Activity.class);
+                    startActivity(intent);
+                } else if (challenge.getTypeQuiz().equals(Constant.QUIZ_SOCIAL)) {
+                    Intent intent = new Intent(BolangActivity.this, QuizActivity.class);
+                    startActivity(intent);
+                }
+            } else if (challenge.getType().equals(Constant.TREASURE_CHALLENGE)) {
+                Intent intent = new Intent(BolangActivity.this, ShakeActivity.class);
                 startActivity(intent);
             }
-            else if(challenge.getTypeQuiz().equals(Constant.QUIZ_SOCIAL)) {
-                Intent intent = new Intent(BolangActivity.this, QuizActivity.class);
-                startActivity(intent);
-            }
-        }else if(challenge.getType().equals(Constant.TREASURE_CHALLENGE)){
-            Intent intent = new Intent(BolangActivity.this, ShakeActivity.class);
-            startActivity(intent);
         }
     }
 
     public void finishGame(){
+//        this.finish();
         Intent intent = new Intent(BolangActivity.this, ResultActivity.class);
         startActivity(intent);
     }

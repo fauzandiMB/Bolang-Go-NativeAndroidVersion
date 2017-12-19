@@ -3,6 +3,7 @@ package go.bolang.www.bolang_go;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -27,6 +28,9 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import model.Challenge;
+import model.Constant;
+import model.DataManager;
+import model.GameInfo;
 
 import static android.R.attr.x;
 import static android.R.attr.y;
@@ -52,10 +56,13 @@ public class ShakeActivity extends AppCompatActivity implements SensorEventListe
     private Challenge challenge;
     private Location lastLocation;
 
+    private GameInfo gi;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shake);
+        gi = DataManager.loadGameInfo(Constant.FILENAME_GAME_INFO, getApplicationContext());
 
         senSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         senAccelerometer = senSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
@@ -218,6 +225,11 @@ public class ShakeActivity extends AppCompatActivity implements SensorEventListe
                 }
 
                 public void onFinish() {
+                    gi.getCurrentChallenge().setCleared(true);
+                    gi.getPlayer().setIndexChallenge(gi.getPlayer().getIndexChallenge() + 1);
+                    gi.setCleared(true);
+                    DataManager.saveGameInfo(gi, Constant.FILENAME_GAME_INFO, getApplicationContext());
+
                     sudahMulai = false;
                     timerText.setTextSize(40);
                     timerText.setText("Waktu Habis!");
@@ -226,7 +238,8 @@ public class ShakeActivity extends AppCompatActivity implements SensorEventListe
                             .setCancelable(false)
                             .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
-                                    //do things
+//                                    //do things
+//                                    a.toResultActivity();
                                     finish();
                                 }
                             });
@@ -235,6 +248,11 @@ public class ShakeActivity extends AppCompatActivity implements SensorEventListe
                 }
             }.start();
 
+    }
+
+    private void toResultActivity() {
+        Intent intent = new Intent(ShakeActivity.this, ResultActivity.class);
+        startActivity(intent);
     }
 
     @Override
