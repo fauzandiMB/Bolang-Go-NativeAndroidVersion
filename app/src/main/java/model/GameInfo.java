@@ -23,7 +23,9 @@ public class GameInfo implements Serializable {
     public List<Challenge> challenges =  new ArrayList<Challenge>();
     public boolean cleared = false;
 
-    public GameInfo(){}
+    public GameInfo(){
+        cleared = false;
+    }
     public GameInfo(String gameName) {
         this.gameName = gameName;
     }

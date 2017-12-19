@@ -85,6 +85,10 @@ public class Challenge implements Serializable {
     public void setIndex(Double index) {this.index = index;}
 
     public Double getDistance(Location playerLocation){
+        if(playerLocation==null) {
+            return Double.MAX_VALUE;
+        }
+
         Location location =  new Location("Challenge-Location");
         location.setLatitude(position.latitude);
         location.setLongitude(position.longitude);

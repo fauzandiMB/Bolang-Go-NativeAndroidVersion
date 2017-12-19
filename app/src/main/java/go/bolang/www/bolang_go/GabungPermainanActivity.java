@@ -2,6 +2,7 @@ package go.bolang.www.bolang_go;
 
 import android.*;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -63,14 +64,45 @@ public class GabungPermainanActivity  extends AppCompatActivity implements ZXing
         Log.v("TAG", rawResult.getBarcodeFormat().toString()); // Prints the scan format (qrcode, pdf417 etc.)
         //this.toGabungPermainan(rawResult.getText());
 
-        // Add new game info
-        gameInfo = new GameInfo();
-        gameInfo.setGameName(rawResult.getText());
+        final String scanned = rawResult.getText();
 
-        if(DataManager.saveGameInfo(gameInfo,Constant.FILENAME_GAME_INFO, getApplicationContext())){
-            this.toGabungPermainan(rawResult.getText());
+        final GabungPermainanActivity act = this;
+
+        if (scanned.equals("game1") || scanned.equals("game2") || scanned.equals("game3")) {
+            android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
+            builder.setMessage("Anda akan masuk kedalam room " + scanned)
+                    .setCancelable(false)
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            //do things
+                            // Add new game info
+                            gameInfo = new GameInfo();
+                            gameInfo.setGameName(scanned);
+
+                            if(DataManager.saveGameInfo(gameInfo,Constant.FILENAME_GAME_INFO, getApplicationContext())){
+                                act.toGabungPermainan(scanned);
+                            }
+
+                            finish();
+                        }
+                    });
+            android.app.AlertDialog alert = builder.create();
+            alert.show();
         }
+        else {
+            android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
+            builder.setMessage("Barcode tidak valid! Silahkan scan ulang.")
+                    .setCancelable(false)
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            //do things
 
+                            act.onResume();
+                        }
+                    });
+            android.app.AlertDialog alert = builder.create();
+            alert.show();
+        }
     }
 
     public void toGabungPermainan(String code) {

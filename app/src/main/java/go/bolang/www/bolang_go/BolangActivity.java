@@ -94,6 +94,7 @@ public class BolangActivity extends AppCompatActivity
         }
 
         //Check it's cleared game
+        Log.d("DEBUG COY", gameInfo.isCleared()+ " blablabla");
         if(gameInfo.isCleared()){
             finishGame();
         }
@@ -199,13 +200,13 @@ public class BolangActivity extends AppCompatActivity
         gameInfo = DataManager.loadGameInfo(Constant.FILENAME_GAME_INFO,getApplicationContext());
 
         //check cleared game
-        if(challenges.isEmpty()){
+        if(!challenges.isEmpty()){
             if(challenges.size() <= gameInfo.getPlayer().getIndexChallenge()){
                 gameInfo.setCleared(true);
             }
         }
 
-        if(gameInfo.isCleared()){
+        if(!challenges.isEmpty() && gameInfo.isCleared()){
             finishGame();
         }
     }
@@ -420,11 +421,19 @@ public class BolangActivity extends AppCompatActivity
     }
 
     public void checkCurrentChallenge(){
+        if(gameInfo == null) {
+            Log.d("DEBUG COY", "blablabla gameinfo nya null");
+            return;
+        }
         currentChallenge = gameInfo.getCurrentChallenge();
         // Debug nearest challange and get distance to player
+        Log.d("DEBUG COY", "blablabla currentChallange " + currentChallenge);
+
         if(currentChallenge != null){
             // Check if distance uncleared challenge less then radius
+            Log.d("DEBUG COY", "blablabla masuk currentChallange " + currentChallenge);
             if(currentChallenge.getDistance(lastLocation) <= radius){
+                Log.d("DEBUG COY", "blablabla radius masuk " + radius);
                 Log.d(this.getClass().getName(), "open challenge");
                 openChallenge(currentChallenge);
             }

@@ -53,6 +53,7 @@
         <activity android:name=".GabungPermainanActivity" />
         <activity android:name=".BolangActivity" />
         <activity android:name=".BuatPermainan2Activity" />
+        <activity android:name=".ResultActivity" />
         <activity android:name=".GLoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
