@@ -14,7 +14,10 @@ public class Player implements Serializable {
     public Double collectedCoin;
     public Double answeredQuiz;
 
-    public Player(){}
+    public Player(){
+        this.collectedCoin = 0.0;
+        this.answeredQuiz = 0.0;
+    }
 
     public Player(String id, String displayName, Position position, Double indexChallenge, Double collectedCoin, Double answeredQuiz) {
         this.id = id;

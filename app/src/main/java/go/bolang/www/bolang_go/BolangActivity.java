@@ -336,7 +336,7 @@ public class BolangActivity extends AppCompatActivity
             }else {
                 Log.d(getClass().getName(), "player not null ");
             }
-            if(index >= i)
+            if(index >= i && mMap != null)
                 challengesMarkers.add(mMap.addMarker(markerOptions));
         }
         if(mMap != null){

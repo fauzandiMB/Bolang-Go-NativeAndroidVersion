@@ -228,6 +228,7 @@ public class ShakeActivity extends AppCompatActivity implements SensorEventListe
                     gi.getCurrentChallenge().setCleared(true);
                     gi.getPlayer().setIndexChallenge(gi.getPlayer().getIndexChallenge() + 1);
                     gi.setCleared(true);
+                    gi.getPlayer().setCollectedCoin(points * 1.0);
                     DataManager.saveGameInfo(gi, Constant.FILENAME_GAME_INFO, getApplicationContext());
 
                     sudahMulai = false;

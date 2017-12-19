@@ -26,6 +26,7 @@ public class QuizActivity extends AppCompatActivity {
     public void choose_answer(View view) {
         gi.getCurrentChallenge().setCleared(true);
         gi.getPlayer().setIndexChallenge(gi.getPlayer().getIndexChallenge() + 1);
+        gi.getPlayer().setAnsweredQuiz(gi.getPlayer().getAnsweredQuiz()+1);
         DataManager.saveGameInfo(gi, Constant.FILENAME_GAME_INFO, getApplicationContext());
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("Selamat, Jawaban Anda Benar!")
