@@ -287,6 +287,8 @@ public class BolangActivity extends AppCompatActivity
 
         challengesMarkers.clear();
         int index = gameInfo.getPlayer().getIndexChallenge().intValue();
+        challenges = gameInfo.getChallenges();
+
         Log.d("debug index", index + "");
         for(int i = 0; i < challenges.size(); i++){
             Challenge challenge = challenges.get(i);
@@ -334,7 +336,7 @@ public class BolangActivity extends AppCompatActivity
             }else {
                 Log.d(getClass().getName(), "player not null ");
             }
-            if(index == i)
+            if(index >= i)
                 challengesMarkers.add(mMap.addMarker(markerOptions));
         }
         if(mMap != null){
